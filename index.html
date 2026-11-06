@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<title>AI 通识刷题 · 交大版</title>
+<style>
+:root{
+  --bg:#f4f6fa; --card:#ffffff; --ink:#17202e; --sub:#64748b; --line:#e6eaf0;
+  --brand:#2563eb; --brand-2:#3b82f6; --ok:#16a34a; --bad:#dc2626; --warn:#d97706;
+  --shadow:0 6px 20px rgba(23,32,46,.07); --radius:16px;
+}
+html[data-theme="dark"]{
+  --bg:#0f1520; --card:#18222f; --ink:#e8eef7; --sub:#93a4bb; --line:#27343f;
+  --brand:#4f8ef7; --brand-2:#6aa5ff; --ok:#34d399; --bad:#f87171; --warn:#fbbf24;
+  --shadow:0 6px 22px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+  font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+body{padding-bottom:env(safe-area-inset-bottom)}
+button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
+a{color:var(--brand);text-decoration:none}
+.wrap{max-width:760px;margin:0 auto;padding:0 14px}
+.topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 86%,transparent);
+  backdrop-filter:saturate(160%) blur(12px);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:10px;
+  padding:calc(10px + env(safe-area-inset-top)) 14px 10px;min-height:56px}
+.topbar h1{font-size:17px;margin:0;font-weight:650;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.iconbtn{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:18px;
+  background:var(--card);border:1px solid var(--line)}
+.iconbtn:active{transform:scale(.96)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.pad{padding:16px}
+.muted{color:var(--sub)}
+.small{font-size:13px}
+.tiny{font-size:12px}
+.center{text-align:center}
+.row{display:flex;align-items:center;gap:10px}
+.between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:12px 18px;border-radius:12px;background:var(--brand);color:#fff;font-weight:600;
+  border:1px solid transparent;transition:transform .06s}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:var(--card);color:var(--ink);border-color:var(--line)}
+.btn.soft{background:color-mix(in srgb,var(--brand) 12%,transparent);color:var(--brand)}
+.btn.block{width:100%}
+.btn:disabled{opacity:.45;pointer-events:none}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;
+  background:color-mix(in srgb,var(--brand) 12%,transparent);color:var(--brand);font-size:12px;font-weight:600}
+.badge.gray{background:color-mix(in srgb,var(--sub) 14%,transparent);color:var(--sub)}
+.badge.ok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}
+.badge.bad{background:color-mix(in srgb,var(--bad) 14%,transparent);color:var(--bad)}
+.stars{letter-spacing:1px;color:var(--warn);font-size:13px}
+.stars .off{color:color-mix(in srgb,var(--sub) 40%,transparent)}
+.hero{padding:18px 16px;margin:14px 0 10px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;
+  border-radius:20px;box-shadow:0 10px 30px rgba(37,99,235,.28)}
+.hero h2{margin:0 0 4px;font-size:20px}
+.hero p{margin:0;opacity:.88;font-size:13px}
+.mode{display:flex;gap:12px;padding:14px;align-items:center;border-radius:14px;
+  background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);width:100%;text-align:left}
+.mode:active{transform:scale(.99)}
+.mode .ico{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:21px;
+  background:color-mix(in srgb,var(--brand) 12%,transparent)}
+.mode h3{margin:0;font-size:15px;font-weight:650}
+.mode p{margin:2px 0 0;font-size:12.5px;color:var(--sub)}
+.opt{width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start;
+  padding:13px 14px;border:1.5px solid var(--line);border-radius:14px;background:var(--card);
+  margin-bottom:10px;transition:border-color .12s,background .12s}
+.opt .k{width:26px;height:26px;flex:0 0 26px;border-radius:50%;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--sub) 14%,transparent);font-size:13px;font-weight:700;color:var(--sub);margin-top:1px}
+.opt .t{flex:1;padding-top:1px}
+.opt.sel{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 7%,transparent)}
+.opt.sel .k{background:var(--brand);color:#fff}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 9%,transparent)}
+.opt.ok .k{background:var(--ok);color:#fff}
+.opt.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 8%,transparent)}
+.opt.bad .k{background:var(--bad);color:#fff}
+.opt:disabled{opacity:1}
+.explain{margin-top:12px;padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--brand) 6%,transparent);
+  border:1px dashed color-mix(in srgb,var(--brand) 35%,transparent);font-size:14px}
+.explain b{color:var(--brand)}
+.verdict{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:6px}
+.verdict.ok{color:var(--ok)} .verdict.bad{color:var(--bad)}
+.progress{height:6px;border-radius:99px;background:color-mix(in srgb,var(--sub) 18%,transparent);overflow:hidden}
+.progress > i{display:block;height:100%;background:var(--brand);border-radius:99px;transition:width .25s}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--card) 92%,transparent);
+  backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabbar-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.tabbar button{padding:9px 4px 8px;display:grid;justify-items:center;gap:2px;font-size:11px;color:var(--sub)}
+.tabbar button.on{color:var(--brand)}
+.tabbar .ti{display:grid;place-items:center;height:22px}
+.sheet{position:fixed;inset:0;z-index:60;display:none;background:rgba(10,15,25,.45);backdrop-filter:blur(2px)}
+.sheet.open{display:block}
+.sheet-in{position:absolute;left:0;right:0;bottom:0;max-height:86vh;overflow:auto;background:var(--card);
+  border-radius:20px 20px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom));animation:up .18s ease}
+@keyframes up{from{transform:translateY(18px);opacity:.6}to{transform:none;opacity:1}}
+.sheet h3{margin:0 0 12px;font-size:16px}
+.tile{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:8px}
+.tile button{aspect-ratio:1/1;border-radius:10px;border:1px solid var(--line);font-size:13px;font-weight:600;
+  background:var(--card);color:var(--sub)}
+.tile button.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok);border-color:transparent}
+.tile button.bad{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad);border-color:transparent}
+.tile button.cur{outline:2px solid var(--brand);outline-offset:1px;color:var(--brand)}
+.stat{text-align:center;padding:14px 8px;border-radius:14px;background:var(--card);border:1px solid var(--line)}
+.stat .n{font-size:22px;font-weight:750;font-variant-numeric:tabular-nums}
+.stat .l{font-size:12px;color:var(--sub)}
+input[type=text],input[type=number],select,textarea{width:100%;padding:10px 12px;border-radius:11px;
+  border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:14px;font-family:inherit}
+label.field{display:block;margin:12px 0}
+label.field span{display:block;font-size:12.5px;color:var(--sub);margin-bottom:5px}
+.switch{position:relative;width:48px;height:28px;flex:0 0 48px}
+.switch input{display:none}
+.switch i{position:absolute;inset:0;border-radius:99px;background:color-mix(in srgb,var(--sub) 35%,transparent);transition:.15s}
+.switch i:after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.15s}
+.switch input:checked + i{background:var(--brand)}
+.switch input:checked + i:after{transform:translateX(20px)}
+hr{border:none;border-top:1px solid var(--line);margin:14px 0}
+.kbd{display:inline-block;padding:1px 6px;border-radius:6px;border:1px solid var(--line);background:var(--bg);
+  font-size:11px;color:var(--sub);font-family:ui-monospace,monospace}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(10px);z-index:80;
+  background:#1f2937;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;
+  transition:.2s;pointer-events:none;max-width:86vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.empty{text-align:center;color:var(--sub);padding:36px 10px;font-size:14px}
+.exam-top{display:flex;align-items:center;gap:10px;padding:10px 14px;position:sticky;top:0;z-index:20;
+  background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.timer{font-variant-numeric:tabular-nums;font-weight:700;color:var(--brand)}
+.timer.danger{color:var(--bad)}
+.listitem{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+.listitem:last-child{border-bottom:none}
+.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(min-width:840px){ .modes{grid-template-columns:1fr 1fr} }
+@media print{
+  .topbar,.tabbar,.noprint{display:none!important}
+  body{background:#fff;padding:0}
+  .card{box-shadow:none;border:1px solid #ddd}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div class="tabbar noprint" id="tabbar">
+  <div class="tabbar-in">
+    <button data-tab="home"><span class="ti"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.2 12 4l9 7.2V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></span>首页</button>
+    <button data-tab="wrong"><span class="ti"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5"/></svg></span>错题</button>
+    <button data-tab="stats"><span class="ti"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span>统计</button>
+    <button data-tab="more"><span class="ti"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span>设置</button>
+  </div>
+</div>
+<div class="sheet" id="sheet"><div class="sheet-in" id="sheetIn"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ============ 题库 ============ */
+const QB = [{"id":"s1-01","stem":"区分弱人工智能与强人工智能的核心标准是（ ）。","options":["是否使用大数据","是否具备自主意识与通用自主思考能力","是否用神经网络","是否可以学习"],"answer":[1],"explain":"弱 AI 只擅长某一类任务；强 AI 的标志是具备通用智能、能像人一样理解和迁移，甚至拥有自主意识。数据量、网络结构都不是判断标准。","cat":"AI基础","diff":1,"src":"AI自练1"},{"id":"s1-02","stem":"以人工神经网络、深度学习为核心的 AI 流派是（ ）。","options":["符号主义","联结主义","行为主义","逻辑主义"],"answer":[1],"explain":"三大流派：符号主义（规则、逻辑）、联结主义（神经网络、模拟大脑连接）、行为主义（感知—行动—环境交互）。深度学习属于联结主义。","cat":"AI基础","diff":2,"src":"AI自练1"},{"id":"s1-03","stem":"依靠规则、逻辑推理、知识图谱的传统 AI 流派是（ ）。","options":["符号主义","联结主义","行为主义","进化主义"],"answer":[0],"explain":"符号主义把知识写成符号和规则，用逻辑推理求解，专家系统、知识图谱是典型代表；它的短板是难以处理模糊、感知类问题。","cat":"AI基础","diff":2,"src":"AI自练1"},{"id":"s1-04","stem":"强调感知、行动、环境交互、机器人控制的 AI 流派是（ ）。","options":["符号主义","联结主义","行为主义","统计主义"],"answer":[2],"explain":"行为主义（控制论学派）认为智能是在与环境的交互中涌现的，机器人、强化学习、具身智能都能追溯到这一思路。","cat":"AI基础","diff":3,"src":"AI自练1"},{"id":"s1-05","stem":"2012 年引爆深度学习浪潮的标志性事件是（ ）。","options":["AlexNet 模型刷新图像识别精度","深蓝战胜象棋冠军","AlphaGo 战胜围棋冠军","GPT 模型发布"],"answer":[0],"explain":"2012 年 AlexNet 在 ImageNet 竞赛上把错误率大幅拉低，GPU+深层卷积网络从此成为主流。深蓝是 1997 年，AlphaGo 是 2016 年。","cat":"AI基础","diff":2,"src":"AI自练1"},{"id":"s1-06","stem":"目前人工智能整体处于哪个发展阶段（ ）。","options":["强人工智能阶段","通用人工智能成熟阶段","弱人工智能 + 大模型快速发展阶段","纯符号主义阶段"],"answer":[2],"explain":"当前所有落地系统都是弱 AI（专才），大模型让能力边界快速扩张，但离 AGI 仍有距离。","cat":"AI基础","diff":1,"src":"AI自练1"},{"id":"s1-07","stem":"以下属于弱人工智能的是（ ）。","options":["具备自我意识的 AI","通用自主思考智能体","可自主进化的 AI","语音识别、人脸识别"],"answer":[3],"explain":"语音识别、人脸识别都只解决单一任务，属于典型的弱 AI；其余三项描述的都是尚未实现的强 AI 特征。","cat":"AI基础","diff":1,"src":"AI自练1"},{"id":"s1-08","stem":"下列不属于人工智能特征的是（ ）。","options":["绝对零误差","数据驱动","自适应学习","模拟人类智能"],"answer":[0],"explain":"任何模型都有误差和不确定性，“绝对零误差”不存在。数据驱动、自适应、模拟人类智能才是 AI 的特征。","cat":"AI基础","diff":1,"src":"AI自练1"},{"id":"s1-09","stem":"人工智能最早的定义核心是（ ）。","options":["超越人类智能","替代人类所有工作","模拟、延伸和扩展人类智能","完全自主意识"],"answer":[2],"explain":"AI 的经典定义是“让机器去做需要人类智能才能完成的事”，即模拟、延伸、扩展人的智能，而不是取代人。","cat":"AI基础","diff":1,"src":"AI自练1"},{"id":"s1-10","stem":"强人工智能的特点不包括（ ）。","options":["自主意识","只能做单一任务","通用推理","自主学习新知识"],"answer":[1],"explain":"“只能做单一任务”恰恰是弱 AI 的特征，强 AI 应该能通用地推理和学习。","cat":"AI基础","diff":1,"src":"AI自练1"},{"id":"s1-11","stem":"关于人工智能发展历程正确的是（ ）。","options":["符号主义起步—神经网络低潮—深度学习爆发—大模型时代","一直是深度学习主导","一直是符号主义主导","无发展波动"],"answer":[0],"explain":"AI 经历了符号主义黄金期、专家系统瓶颈与两次“AI 寒冬”，2012 年后深度学习爆发，2022 年后进入大模型时代。","cat":"AI基础","diff":2,"src":"AI自练1"},{"id":"s1-12","stem":"机器博弈最早证明 AI 可行性的代表是（ ）。","options":["GPT","深蓝","AlexNet","文心一言"],"answer":[1],"explain":"1997 年 IBM 深蓝战胜国际象棋世界冠军卡斯帕罗夫，是机器博弈的标志性事件，比 AlphaGo 早近 20 年。","cat":"AI基础","diff":2,"src":"AI自练1"},{"id":"s1-13","stem":"2016 年 AI 里程碑事件是（ ）。","options":["AlexNet 发布","深蓝问世","AlphaGo 战胜人类围棋冠军","大模型普及"],"answer":[2],"explain":"2016 年 AlphaGo 以 4:1 战胜李世石，展示了深度强化学习在超复杂博弈问题上的威力。","cat":"AI基础","diff":1,"src":"AI自练1"},{"id":"s1-14","stem":"下列说法正确的是（ ）。","options":["AI 已经具备人类情感","AI 可以完全替代人类","强 AI 已普及","AI 是工具，辅助人类工作"],"answer":[3],"explain":"现阶段 AI 没有情感和自主意识，也远未普及强 AI；把它当作提高效率的工具、由人负责把关，才是正确认识。","cat":"AI基础","diff":1,"src":"AI自练1"},{"id":"s1-15","stem":"弱人工智能的核心特征是（ ）。","options":["通用全能","任务专一、无自主意识","可自我进化","拥有情感"],"answer":[1],"explain":"弱 AI 在特定任务上可以超过人类，但不会迁移、没有自我意识和情感。","cat":"AI基础","diff":1,"src":"AI自练1"},{"id":"s1-16","stem":"关于通用人工智能（AGI），下列说法正确的是（ ）。","options":["当前我们日常使用的大模型已经达到了通用人工智能水平","指能够胜任人类几乎所有智力任务、可灵活迁移能力的人工智能，目前尚未实现","就是指功能强大的 AIGC 生成工具","只要参数量足够大就等于实现了通用人工智能"],"answer":[1],"explain":"AGI 强调“通用 + 可迁移”，目前尚未实现；参数规模只是必要条件之一，不是充分条件。","cat":"AI基础","diff":2,"src":"AI自练1"},{"id":"s1-17","stem":"监督学习的训练数据特点是（ ）。","options":["带标签数据","无标签数据","不需要数据","随机数据"],"answer":[0],"explain":"监督学习用“输入 + 正确答案（标签）”成对训练，模型学的是从输入到标签的映射。","cat":"机器学习","diff":1,"src":"AI自练1"},{"id":"s1-18","stem":"无监督学习的特点是（ ）。","options":["必须有标签","无标签，自动聚类分组","只能用于图像","精度最高"],"answer":[1],"explain":"无监督学习只给数据不给标签，让模型自己发现结构，如聚类、降维、异常检测。","cat":"机器学习","diff":1,"src":"AI自练1"},{"id":"s1-19","stem":"强化学习的核心三要素是（ ）。","options":["数据、标签、模型","图像、文本、音频","智能体、环境、奖励机制","算力、算法、数据"],"answer":[2],"explain":"智能体在环境中采取动作，环境返回状态和奖励，智能体通过最大化累计奖励来学习策略。","cat":"机器学习","diff":2,"src":"AI自练1"},{"id":"s1-20","stem":"数据标注的主要作用是（ ）。","options":["压缩文件","加密数据","删除噪声","生成带标签数据，供监督学习训练"],"answer":[3],"explain":"标注把原始数据变成“有正确答案”的训练样本，是监督学习的前提，标注质量直接决定模型上限。","cat":"数据与算力","diff":1,"src":"AI自练1"},{"id":"s1-21","stem":"数据预处理的主要目的是（ ）。","options":["清洗脏数据、提升数据质量","增加数据总量","降低模型效果","加密数据"],"answer":[0],"explain":"预处理包括去重、缺失值处理、异常值处理、归一化等，让数据干净、规格统一，模型才学得稳。","cat":"数据与算力","diff":1,"src":"AI自练1"},{"id":"s1-22","stem":"下列不属于数据预处理操作的是（ ）。","options":["数据清洗","归一化","人工创作新数据","去异常值"],"answer":[2],"explain":"预处理是对已有数据做清洗和变换；“人工创作新数据”属于数据生成/增强，不是预处理。","cat":"数据与算力","diff":1,"src":"AI自练1"},{"id":"s1-23","stem":"模型过拟合是指（ ）。","options":["训练、测试效果都好","训练集极好、测试/真实场景极差","两边都差","模型不学习"],"answer":[1],"explain":"过拟合=把训练数据里的细节甚至噪声都背下来了，训练集分数虚高，换新数据就崩。","cat":"机器学习","diff":2,"src":"AI自练1"},{"id":"s1-24","stem":"模型欠拟合是指（ ）。","options":["训练、测试效果均差","只训练好","只测试好","模型参数过多"],"answer":[0],"explain":"欠拟合=模型太简单，连训练集的基本规律都没学到，训练和测试表现都差。","cat":"机器学习","diff":2,"src":"AI自练1"},{"id":"s1-25","stem":"机器学习中“泛化能力”指（ ）。","options":["只适配训练数据","记忆力强","参数多","适配全新未知数据的能力"],"answer":[3],"explain":"泛化能力是模型在没见过的数据上的表现，这才是模型真正有用的标志。","cat":"机器学习","diff":1,"src":"AI自练1"},{"id":"s1-26","stem":"下列属于监督学习任务的是（ ）。","options":["数据聚类","图像分类","无标签分组","自动降噪"],"answer":[1],"explain":"图像分类需要人工标注类别标签，属于监督学习；聚类、无标签分组是无监督学习。","cat":"机器学习","diff":1,"src":"AI自练1"},{"id":"s1-27","stem":"聚类任务属于（ ）。","options":["无监督学习","监督学习","强化学习","半监督学习"],"answer":[0],"explain":"聚类没有任何标签，靠样本间的相似度自动分组，是经典的无监督学习任务。","cat":"机器学习","diff":1,"src":"AI自练1"},{"id":"s1-28","stem":"AlphaGo 主要使用的学习方式是（ ）。","options":["纯监督学习","无监督学习","强化学习 + 蒙特卡洛树搜索","人工规则"],"answer":[2],"explain":"AlphaGo 先用人类棋谱做监督预训练，再用自我对弈的强化学习提升，落子时用蒙特卡洛树搜索（MCTS）搜索。","cat":"机器学习","diff":3,"src":"AI自练1"},{"id":"s1-29","stem":"训练数据中存在大量错误数据会导致（ ）。","options":["模型更精准","训练更快","泛化更强","模型效果变差、产生偏见"],"answer":[3],"explain":"垃圾进垃圾出：错误标注会让模型学到错误规律，甚至放大数据中的偏见。","cat":"数据与算力","diff":1,"src":"AI自练1"},{"id":"s1-30","stem":"下列哪项可以缓解过拟合（ ）。","options":["增加错误数据","增加高质量训练数据","减少训练次数","降低数据质量"],"answer":[1],"explain":"更多、更高质量的数据能让模型学到共性而非死记；此外正则化、Dropout、早停也能缓解过拟合。","cat":"机器学习","diff":2,"src":"AI自练1"},{"id":"s1-31","stem":"人工智能算法的三要素不包括（ ）。","options":["人工经验背诵","数据","算法","算力"],"answer":[0],"explain":"业界公认 AI 三要素是数据、算法、算力；靠人工背诵规则无法规模化，也不是现代 AI 的要素。","cat":"AI基础","diff":1,"src":"AI自练1"},{"id":"s1-32","stem":"数据质量相比数据数量，说法正确的是（ ）。","options":["数量越大一定越好","质量无关紧要","高质量数据比单纯大数据更重要","数据无需清洗"],"answer":[2],"explain":"“数据质量 > 数据数量”，脏数据再多也会拖累模型；高质量、多样、标注准确的数据才是关键。","cat":"数据与算力","diff":1,"src":"AI自练1"},{"id":"s1-33","stem":"关于过拟合，下面理解最准确的是（ ）。","options":["模型还没有学到数据的基本规律","模型死记硬背了训练集中的细节甚至噪声，在陌生新数据上表现变差","模型参数量太少导致能力不足","模型训练速度太慢"],"answer":[1],"explain":"过拟合的本质是“记住了而不是学会了”，表现为训练集好、验证/测试集差。","cat":"机器学习","diff":2,"src":"AI自练1"},{"id":"s1-34","stem":"下面关于欠拟合说法正确的是（ ）。","options":["模型在训练集上表现很好、测试集很差","模型复杂度太高导致记住了噪声","模型没有抓住数据的核心规律，训练和新数据上效果都不好","只能靠增加训练数据来彻底解决"],"answer":[2],"explain":"欠拟合是模型能力不足，训练集都没学好；可以通过增加模型复杂度、更多特征、更长训练来改善。","cat":"机器学习","diff":2,"src":"AI自练1"},{"id":"s1-35","stem":"以下最能描述人工智能模型“鲁棒性”的是（ ）。","options":["模型训练速度很快","模型面对微小扰动、噪声或异常输入时仍能稳定正确输出","模型在训练集上准确率非常高","模型参数量很大"],"answer":[1],"explain":"鲁棒性（Robustness）指模型抗干扰能力：输入加点噪声、换个角度、换个说法，结果依然可靠。","cat":"机器学习","diff":2,"src":"AI自练1"},{"id":"s1-36","stem":"以下最能说明一个 AI 模型鲁棒性较差的是（ ）。","options":["在训练过的图片上识别很准，但图片加一点点模糊就识别错误","模型训练时损失下降很慢","模型生成文字速度比较慢","模型占用内存很大"],"answer":[0],"explain":"对微小扰动极其敏感、一加噪声就错，说明模型没学到本质特征，鲁棒性差。","cat":"机器学习","diff":2,"src":"AI自练1"},{"id":"s1-37","stem":"人工智能里所说的“泛化能力”主要指（ ）。","options":["模型能够记住训练数据里的每一个样本","模型对从未见过的新样本也能做出合理预测","模型可以同时处理文字、图像、声音多种数据","模型可以无限生成新内容"],"answer":[1],"explain":"泛化=举一反三，在新样本上仍然表现良好；只能记住训练样本反而说明过拟合。","cat":"机器学习","diff":1,"src":"AI自练1"},{"id":"s1-38","stem":"关于泛化能力，下面说法正确的是（ ）。","options":["只要在训练数据集上正确率 100%，泛化能力一定很好","过拟合通常会导致模型泛化能力变差","泛化能力越强，模型就一定越容易训练","大模型一定拥有完美的泛化能力"],"answer":[1],"explain":"训练集 100% 正确往往是过拟合信号；泛化能力与训练难度、模型规模没有必然关系。","cat":"机器学习","diff":2,"src":"AI自练1"},{"id":"s1-39","stem":"以下属于监督学习的应用场景是（ ）。","options":["有标注数据集的图像分类","基于无标签数据的聚类分析","强化学习的游戏 AI 训练","基于生成对抗网络的图像生成"],"answer":[0],"explain":"有标注 → 监督学习；聚类是无监督；游戏 AI 是强化学习；GAN 属于生成式无监督/自监督。","cat":"机器学习","diff":2,"src":"AI自练1"},{"id":"s1-40","stem":"机器学习中数据集通常划分为（ ）。","options":["训练集、验证集、测试集","非结构化数据集和结构化数据集","视频数据集、文本数据集、声音数据集、图像数据集","离散型数据集和连续型数据集"],"answer":[0],"explain":"训练集学参数，验证集调超参数和早停，测试集只在最后评估一次，防止“偷看答案”。","cat":"机器学习","diff":1,"src":"AI自练1"},{"id":"s1-41","stem":"在训练一个房价预测模型时，发现模型在训练数据上的预测误差极低，但在测试数据上误差显著增加。这种现象通常被称为（ ）。","options":["过拟合","欠拟合","数据泄露","数据增强"],"answer":[0],"explain":"训练误差低、测试误差高是过拟合的典型曲线，可通过正则化、更多数据、简化模型来缓解。","cat":"机器学习","diff":2,"src":"AI自练1"},{"id":"s1-42","stem":"深度学习的基础是（ ）。","options":["单一逻辑判断","人工规则","简单公式","多层人工神经网络"],"answer":[3],"explain":"深度学习用多层神经网络自动从数据中逐层提取特征，层数越多能表达的规律越复杂。","cat":"深度学习","diff":1,"src":"AI自练1"},{"id":"s1-43","stem":"CNN 卷积神经网络最擅长的任务是（ ）。","options":["文本翻译","图像特征提取、图像分类","语音合成","文本生成"],"answer":[1],"explain":"卷积核天然适合捕捉图像的局部纹理和边缘，权值共享又降低了参数量，因此是视觉任务的主力。","cat":"深度学习","diff":1,"src":"AI自练1"},{"id":"s1-44","stem":"Transformer 架构主要用于（ ）。","options":["图片压缩","视频剪辑","自然语言处理、大模型","硬件驱动"],"answer":[2],"explain":"Transformer 以自注意力为核心，最初用于机器翻译，现在是 GPT、BERT 等大模型的基础架构。","cat":"深度学习","diff":1,"src":"AI自练1"},{"id":"s1-45","stem":"大模型里广泛使用的“自注意力机制（Self-Attention）”主要作用是（ ）。","options":["让模型一次性记住所有历史内容，自动衡量文本中不同词语之间关联的重要程度","自动增加模型参数量","自动提升训练时的算力","自动修正模型的幻觉"],"answer":[0],"explain":"自注意力让每个词都能“看到”句子里所有词，并给相关词分配更高权重，从而理解上下文关系。","cat":"深度学习","diff":3,"src":"AI自练1"},{"id":"s1-46","stem":"下面关于自注意力机制的说法，合理的是（ ）。","options":["自注意力机制只能处理英文文本","自注意力是 Transformer 架构的核心组成部分之一","使用自注意力就不会出现大模型幻觉","自注意力可以直接替代全部训练数据"],"answer":[1],"explain":"自注意力与语言无关，且不能消除幻觉、不能替代数据；它只是 Transformer 的核心计算模块。","cat":"深度学习","diff":2,"src":"AI自练1"},{"id":"s1-47","stem":"Transformer 是指（ ）。","options":["一款可以直接生成视频的应用软件","以自注意力机制为核心、现在绝大多数大模型都基于它的基础架构","专门用来加速 AI 运算的硬件芯片","一种防止大模型产生幻觉的算法"],"answer":[1],"explain":"Transformer 是 2017 年提出的神经网络架构，“Attention Is All You Need”，GPT/BERT 都基于它。","cat":"深度学习","diff":2,"src":"AI自练1"},{"id":"s1-48","stem":"下一词预测（Next-token Prediction）是指（ ）。","options":["大模型能够提前预知未来真实会发生的事件","大模型生成文本的基本方式：根据前文，按概率挑选下一个最可能出现的词语","专门用来预测股票涨跌的 AI 任务","用户预先写好提示词让 AI 按顺序输出"],"answer":[1],"explain":"大模型本质是“接龙高手”：读入前文，输出下一个 token 的概率分布，逐个生成就形成了完整回答。","cat":"大模型原理","diff":2,"src":"AI自练1"},{"id":"s1-49","stem":"涌现现象是指（ ）。","options":["模型参数量越小，能力越强","当模型规模、数据量达到一定阈值后，自动出现小模型不具备、没有被单独设计的新能力","大模型一旦涌现能力就不会再出错","涌现能力可以通过简单增加算力无条件实现"],"answer":[1],"explain":"规模跨过某个临界点后，模型突然表现出推理、翻译等未被专门训练的能力，这就是涌现（Emergence）。","cat":"大模型原理","diff":3,"src":"AI自练1"},{"id":"s1-50","stem":"预训练（Pre-training）指（ ）。","options":["针对某一个具体小任务反复微调模型","先用海量通用、广泛的数据进行基础训练，让模型先学到通用常识与语言规律","训练前预先把所有数据人工打上标签","只对模型的一小部分参数进行更新"],"answer":[1],"explain":"预训练是“通识教育”，用海量无标注文本自监督学习；之后再用少量领域数据微调，就是“岗前培训”。","cat":"大模型原理","diff":2,"src":"AI自练1"},{"id":"s1-51","stem":"微调（Fine-tuning）的正确理解是（ ）。","options":["从零开始用海量数据训练一个全新大模型","在已经完成预训练的成熟模型基础上，使用相对少量的领域数据继续小幅训练","把大模型压缩成小模型的过程","专门用来消除大模型幻觉的技术"],"answer":[1],"explain":"微调站在预训练模型的肩膀上，用少量领域数据调整参数，让它适配具体任务，成本远低于从头训练。","cat":"大模型原理","diff":2,"src":"AI自练1"},{"id":"s1-52","stem":"上下文窗口（Context Window）指（ ）。","options":["电脑屏幕可以显示的文字行数","大模型一次能够同时“看见”并加以参考的最大 token（可理解为字词）数量","用户和 AI 对话的总时长","AI 生成内容的最大速度"],"answer":[1],"explain":"上下文窗口是模型单次能处理的 token 上限，窗口越大能塞进去的资料越多，但也会更耗算力和显存。","cat":"大模型原理","diff":2,"src":"AI自练1"},{"id":"s1-53","stem":"对齐在大模型领域是指（ ）。","options":["让大模型排版整齐、格式对齐","通过技术手段让大模型的行为、输出尽量符合人类的价值观、安全规范和使用意图","把多个大模型合并对齐成一个","将不同语言的数据集对齐翻译"],"answer":[1],"explain":"对齐（Alignment）解决“模型能力很强但可能不听话/不安全”的问题，RLHF、宪法 AI 都是对齐手段。","cat":"大模型原理","diff":3,"src":"AI自练1"},{"id":"s1-54","stem":"RLHF（基于人类反馈的强化学习）主要作用是（ ）。","options":["大幅提升模型的数学计算能力","用来蒸馏得到更小的学生模型","专门加速大模型的训练速度","利用人类的打分和偏好，引导大模型输出更安全、更符合人类期望的回答"],"answer":[3],"explain":"RLHF 让人类对多个回答排序，训练奖励模型，再用强化学习优化策略，使输出更符合人类偏好，ChatGPT 的关键一步。","cat":"大模型原理","diff":3,"src":"AI自练1"},{"id":"s1-55","stem":"大语言模型主要处理的数据类型是（ ）。","options":["纯图片","视频","自然语言文本","音频"],"answer":[2],"explain":"大语言模型（LLM）以文本为基本输入输出，多模态模型才额外处理图像、音频、视频。","cat":"大模型原理","diff":1,"src":"AI自练1"},{"id":"s1-56","stem":"大模型参数量越大，通常（ ）。","options":["效果一定变差","训练成本越低","知识容量、理解能力越强（同等条件下）","运行速度越快"],"answer":[2],"explain":"参数越多，模型能存储的知识和模式越丰富，但训练/推理成本也越高，且不是无条件变好。","cat":"大模型原理","diff":2,"src":"AI自练1"},{"id":"s1-57","stem":"大模型知识存在时效性问题，原因是（ ）。","options":["训练数据有时间截止，无法实时联网更新","模型不会学习","算力不足","数据永远不变"],"answer":[0],"explain":"模型知识停留在训练数据截止的时间点，之后的新闻它不知道；可用联网检索、RAG、重新训练来补。","cat":"大模型原理","diff":2,"src":"AI自练1"},{"id":"s1-58","stem":"以下不属于大语言模型核心特征的是（ ）。","options":["基于 Transformer 等深度架构的多层神经网络","无需大量训练数据","参数规模庞大","具备多任务泛化能力"],"answer":[1],"explain":"大模型恰恰依赖海量训练数据；“无需大量数据”与事实相反。","cat":"大模型原理","diff":2,"src":"AI自练1"},{"id":"s2-01","stem":"大模型“幻觉”指的是（ ）。","options":["模型想象力丰富","创意写作","编造不存在的虚假事实、信息错误","识别图像模糊"],"answer":[2],"explain":"幻觉（Hallucination）是模型一本正经地编造不存在的事实，语气还很自信，所以关键信息必须人工核验。","cat":"大模型原理","diff":1,"src":"AI自练2"},{"id":"s2-02","stem":"使用大模型内容时正确做法是（ ）。","options":["直接全盘采信","人工核验事实、甄别错误","直接商用","输入隐私信息"],"answer":[1],"explain":"模型会出错也会编造，重要内容必须查证；同时不要把身份证、银行卡等隐私信息输进去。","cat":"伦理与安全","diff":1,"src":"AI自练2"},{"id":"s2-03","stem":"AIGC 的含义是（ ）。","options":["人工生成内容","自动采集内容","网络爬虫内容","人工智能生成内容"],"answer":[3],"explain":"AIGC = AI Generated Content，人工智能生成内容，包括 AI 写的文字、画的图、做的视频和音乐。","cat":"AIGC与应用","diff":1,"src":"AI自练2"},{"id":"s2-04","stem":"提示词优化的主要目的是（ ）。","options":["增加字数","让模型输出更精准、贴合需求","提高模型参数量","加快训练"],"answer":[1],"explain":"提示词只影响输入，不改模型参数；优化提示词是为了把任务说清楚，让输出更准、更符合要求。","cat":"AIGC与应用","diff":1,"src":"AI自练2"},{"id":"s2-05","stem":"不属于大模型能力的是（ ）。","options":["文本创作","知识问答","简单逻辑推理","绝对无误的事实输出"],"answer":[3],"explain":"大模型无法保证事实永远正确，幻觉是固有风险；文本创作、问答、推理才是它的强项。","cat":"大模型原理","diff":1,"src":"AI自练2"},{"id":"s2-06","stem":"多模态大模型相比传统纯文本大模型，优势是（ ）。","options":["图文音视频综合理解","无任何错误","不需要算力","无需数据训练"],"answer":[0],"explain":"多模态模型能同时理解文字、图像、音频、视频，比如看图答题、看视频总结，这是纯文本模型做不到的。","cat":"AIGC与应用","diff":2,"src":"AI自练2"},{"id":"s2-07","stem":"下列哪种 Prompt 输出效果最好（ ）。","options":["随便写点","帮我弄一下","写文章","明确任务、对象、风格、字数、要求"],"answer":[3],"explain":"好提示词=角色+任务+对象+格式+约束。信息越具体，模型越不容易跑偏。","cat":"AIGC与应用","diff":1,"src":"AI自练2"},{"id":"s2-08","stem":"大模型无法自主完成的是（ ）。","options":["产生自我意识与情感","总结文本","翻译语言","生成文案"],"answer":[0],"explain":"模型只是概率预测，没有意识、情感和主观体验；总结、翻译、写作都是它擅长的任务。","cat":"大模型原理","diff":1,"src":"AI自练2"},{"id":"s2-09","stem":"生成式 AI 与传统判别式 AI 的区别是（ ）。","options":["只能分类","可以自主创造新内容","必须人工输入","无差别"],"answer":[1],"explain":"判别式 AI 判断“是什么”（分类、预测），生成式 AI 创造“新内容”（写文、作画、生成代码）。","cat":"AIGC与应用","diff":2,"src":"AI自练2"},{"id":"s2-10","stem":"下列不属于 AIGC 伦理风险的是（ ）。","options":["虚假信息","深度伪造诈骗","抄袭侵权","辅助学习答疑"],"answer":[3],"explain":"辅助学习是正常、正向的应用；虚假信息、换脸诈骗、侵权才是 AIGC 的伦理与法律风险。","cat":"伦理与安全","diff":1,"src":"AI自练2"},{"id":"s2-11","stem":"幻觉在大模型中是指（ ）。","options":["大模型像人类一样产生了意识和想象","大模型一本正经、逻辑通顺地编造并不存在或不符合事实的内容","大模型生成图像时出现扭曲的画面","提示词写得太长导致模型崩溃"],"answer":[1],"explain":"注意“逻辑通顺”四个字：幻觉最迷惑人的地方就是表达流畅、言之凿凿，但内容与事实不符。","cat":"大模型原理","diff":2,"src":"AI自练2"},{"id":"s2-12","stem":"提示工程（Prompt Engineering）是指（ ）。","options":["修改大模型内部参数来提升它的能力","通过精心设计提示词、指令、上下文来引导大模型输出更符合需求的结果","编写代码开发新的大模型","用工程手段提升 GPU 算力"],"answer":[1],"explain":"提示工程不改模型，只改输入：用结构化的指令、示例、上下文把模型“引导”到正确方向。","cat":"AIGC与应用","diff":2,"src":"AI自练2"},{"id":"s2-13","stem":"多模态是指（ ）。","options":["模型只能处理文字信息","模型可以同时接收、理解和生成文字、图像、音频、视频等多种不同类型的信息","模型可以同时在多台 GPU 上并行运行","模型拥有多种独立的意识"],"answer":[1],"explain":"“模态”指信息形态；多模态=跨形态理解与生成，例如 GPT-4o 能看图片、听语音并回答。","cat":"AIGC与应用","diff":1,"src":"AI自练2"},{"id":"s2-14","stem":"AI 智能体（Agent）最核心的特点是（ ）。","options":["能够一次性生成很长的文本","可以自主进行目标拆解、规划、调用工具、多步执行以完成复杂任务","运行速度比普通大模型快很多","不需要大模型就可以独立运行"],"answer":[1],"explain":"智能体 = 大模型 + 规划 + 记忆 + 工具调用，能自己拆任务、多步执行，而不只是“一问一答”。","cat":"AIGC与应用","diff":3,"src":"AI自练2"},{"id":"s2-15","stem":"具身智能（Embodied AI）指（ ）。","options":["AI 具有了人类一样的身体和自我意识","AI 通过实体载体（如机器人）在真实物理环境中感知、交互、行动并从中学习","AI 可以把数字内容“变成实物”","一种专门生成 3D 模型的 AI 软件"],"answer":[1],"explain":"具身智能强调“有身体”，在真实环境中边感知边行动边学习，人形机器人、自动驾驶都属于这一方向。","cat":"AI基础","diff":3,"src":"AI自练2"},{"id":"s2-16","stem":"关于知识蒸馏，下面描述正确的是（ ）。","options":["蒸馏后学生模型一定比教师模型准确率更高","蒸馏不需要用到已经训练好的教师模型","蒸馏可以让模型体积变小、推理速度变快","蒸馏本质上就是把教师模型直接复制一份"],"answer":[2],"explain":"知识蒸馏让小的学生模型模仿大教师模型的输出分布，牺牲一点精度换取体积小、速度快，常用于端侧部署。","cat":"大模型原理","diff":4,"src":"AI自练2"},{"id":"s2-17","stem":"“思维链（Chain of Thought）”技术的主要作用是（ ）。","options":["分解复杂任务为可执行步骤","提升模型训练速度","减少模型参数量","增强模型视觉识别能力"],"answer":[0],"explain":"让模型“一步一步想”，把复杂问题拆成中间步骤，能明显提升数学、逻辑类题目的正确率。","cat":"AIGC与应用","diff":3,"src":"AI自练2"},{"id":"s2-18","stem":"以下不属于大语言模型在金融领域应用的是（ ）。","options":["信贷风险评估","股市风险预测","客户服务机器人","实时高频交易处理"],"answer":[3],"explain":"实时高频交易靠低延迟算法和撮合系统，毫秒级响应不是大语言模型擅长的场景。","cat":"应用场景","diff":3,"src":"AI自练2"},{"id":"s2-19","stem":"AI 训练最核心的算力硬件是（ ）。","options":["内存","GPU","硬盘","显示器"],"answer":[1],"explain":"GPU 有成千上万个计算核心，擅长大规模矩阵并行运算，是深度学习训练的主力；TPU/NPU 是专用加速芯片。","cat":"数据与算力","diff":1,"src":"AI自练2"},{"id":"s2-20","stem":"GPU 相比 CPU 的优势是（ ）。","options":["并行计算能力强","串行计算更强","存储更大","功耗更低"],"answer":[0],"explain":"CPU 擅长复杂逻辑和串行任务，GPU 擅长海量简单运算并行，正好匹配神经网络的矩阵运算。","cat":"数据与算力","diff":1,"src":"AI自练2"},{"id":"s2-21","stem":"下列不属于 AI 算力芯片的是（ ）。","options":["GPU","TPU","NPU","SSD"],"answer":[3],"explain":"SSD 是固态硬盘，属于存储设备；GPU、TPU、NPU 都是不同形态的 AI 计算芯片。","cat":"数据与算力","diff":1,"src":"AI自练2"},{"id":"s2-22","stem":"NPU 主要用于（ ）。","options":["文件存储","网络传输","移动端 AI 推理加速","视频播放"],"answer":[2],"explain":"NPU（神经网络处理单元）专为神经网络推理设计，功耗低，常见于手机 SoC，用于人脸解锁、拍照增强等。","cat":"数据与算力","diff":2,"src":"AI自练2"},{"id":"s2-23","stem":"AI 推理（Inference）指的是（ ）。","options":["训练模型","用已训练好的模型处理新数据、输出结果","清洗数据","标注数据"],"answer":[1],"explain":"训练是“学习”，推理是“使用”：模型训练好后，拿新输入算出输出，就是推理。","cat":"数据与算力","diff":1,"src":"AI自练2"},{"id":"s2-24","stem":"影响大模型训练成本最大的因素是（ ）。","options":["参数量与训练数据量","显示器分辨率","机箱大小","系统版本"],"answer":[0],"explain":"训练成本 ≈ 参数量 × 数据量 × 训练轮数，规模越大，GPU 时长和电费越高。","cat":"数据与算力","diff":2,"src":"AI自练2"},{"id":"s2-25","stem":"云计算对 AI 的作用是（ ）。","options":["降低网络速度","减少数据存储","限制算力","提供大规模弹性算力支撑"],"answer":[3],"explain":"云计算按需提供 GPU 集群，训练时扩容、闲时释放，让小团队也能用上大规模算力。","cat":"数据与算力","diff":1,"src":"AI自练2"},{"id":"s2-26","stem":"边缘 AI 指的是（ ）。","options":["必须联网运行","云端运行","在本地设备端运行 AI 推理","无需硬件"],"answer":[2],"explain":"边缘 AI 把推理放到手机、摄像头、汽车等终端，响应快、省带宽、隐私数据不出本地。","cat":"数据与算力","diff":2,"src":"AI自练2"},{"id":"s2-27","stem":"下列属于边缘 AI 应用的是（ ）。","options":["云端大模型聊天","手机本地人脸解锁","网页 AI 绘图","在线翻译"],"answer":[1],"explain":"手机本地人脸解锁在设备端完成推理，不上传云端，是典型的边缘 AI；其余三项都依赖云端算力。","cat":"数据与算力","diff":2,"src":"AI自练2"},{"id":"s2-28","stem":"模型权重（Weights）指的是（ ）。","options":["模型训练习得的参数，决定模型能力","数据标签","提示词","算力大小"],"answer":[0],"explain":"权重是训练过程中不断调整的数值参数，模型“学到的东西”就存在这些权重里。","cat":"大模型原理","diff":2,"src":"AI自练2"},{"id":"s2-29","stem":"人工智能数据生命周期顺序正确的是（ ）。","options":["训练→采集→清洗→使用","清洗→采集→训练","采集→预处理→标注→训练→推理应用","随机顺序"],"answer":[2],"explain":"先采集原始数据，再预处理清洗，然后标注成训练样本，训练出模型，最后部署推理应用。","cat":"数据与算力","diff":2,"src":"AI自练2"},{"id":"s2-30","stem":"下列属于结构化数据的是（ ）。","options":["文章","语音","图片","Excel 表格数据"],"answer":[3],"explain":"结构化数据有固定的行列格式（如表格、数据库），文章、语音、图片都是非结构化数据。","cat":"数据与算力","diff":1,"src":"AI自练2"},{"id":"s2-31","stem":"大模型主要擅长处理的数据类型是（ ）。","options":["纯结构化表格","非结构化自然语言","机器代码","数值计算"],"answer":[1],"explain":"大语言模型以自然语言文本为主要处理对象；表格数值计算恰恰是它容易出错的短板。","cat":"大模型原理","diff":1,"src":"AI自练2"},{"id":"s2-32","stem":"数据脱敏的目的是（ ）。","options":["保护用户隐私，防止信息泄露","提升精度","加快训练","简化模型"],"answer":[0],"explain":"脱敏把姓名、身份证号、手机号等敏感字段替换或掩码，既可用数据又不泄露个人隐私。","cat":"伦理与安全","diff":1,"src":"AI自练2"},{"id":"s2-33","stem":"算力、算法、数据三者关系正确的是（ ）。","options":["互相独立无关","只需其一即可","三者协同支撑 AI 能力","数据最不重要"],"answer":[2],"explain":"AI 三要素缺一不可：数据是燃料，算法是引擎，算力是马力，三者协同才能跑起来。","cat":"AI基础","diff":1,"src":"AI自练2"},{"id":"s2-34","stem":"模型推理速度主要受什么影响（ ）。","options":["键盘鼠标","硬件算力、模型大小","屏幕亮度","系统主题"],"answer":[1],"explain":"推理速度取决于芯片算力、模型参数量、量化精度、批大小等，与外设和显示设置无关。","cat":"数据与算力","diff":1,"src":"AI自练2"},{"id":"s2-35","stem":"离线 AI 模型指（ ）。","options":["需要联网","依赖云端","必须上传数据","本地运行、无需联网"],"answer":[3],"explain":"离线模型把权重下载到本地，断网也能推理，隐私性好，适合手机、工业现场等场景。","cat":"数据与算力","diff":1,"src":"AI自练2"},{"id":"s2-36","stem":"下列属于 AI 开源优势的是（ ）。","options":["促进技术普及与二次开发","无任何风险","绝对安全","无需合规"],"answer":[0],"explain":"开源降低门槛、便于二次开发与审计；但开源不等于无风险、免合规，许可证和安全责任仍要遵守。","cat":"AI基础","diff":2,"src":"AI自练2"},{"id":"s2-37","stem":"知识库增强大模型（RAG）的主要作用是（ ）。","options":["增加模型参数","改变模型架构","弥补知识时效性、减少幻觉","提升算力"],"answer":[2],"explain":"RAG 先从知识库检索相关资料，再让模型基于资料回答，能补上时效性并显著降低幻觉。","cat":"大模型原理","diff":3,"src":"AI自练2"},{"id":"s2-38","stem":"若云计算的集中处理方式无法满足计算的低时延、低功耗需求，最适合满足该需求的技术是（ ）。","options":["边缘计算","内存扩容","物联网技术","并行计算"],"answer":[0],"explain":"边缘计算把算力下沉到离设备最近的地方，减少网络往返，天然满足低时延、低功耗、数据本地化。","cat":"数据与算力","diff":2,"src":"AI自练2"},{"id":"s2-39","stem":"知识库与知识图谱的主要区别在于（ ）。","options":["知识库侧重存储，知识图谱强调结构表示和语义关联","知识库强调实体关系，知识图谱强调静态存储","知识库支持语义推理，知识图谱仅支持关键词检索","知识库以图结构组织，知识图谱以表格形式存储"],"answer":[0],"explain":"知识库是把知识存起来（文档、条目），知识图谱用“实体—关系—实体”的图结构表达语义，便于推理。","cat":"AI基础","diff":4,"src":"AI自练2"},{"id":"s2-40","stem":"以下属于 AI 伦理风险的是（ ）。","options":["辅助办公","辅助教学","智能导航","深度伪造人脸诈骗"],"answer":[3],"explain":"深度伪造可被用于诈骗、造谣、侵犯肖像权，是典型的 AI 伦理与法律风险；前三项都是正常应用。","cat":"伦理与安全","diff":1,"src":"AI自练2"},{"id":"s2-41","stem":"算法偏见指的是（ ）。","options":["模型继承训练数据中的偏见，产生不公平判断","模型精度太高","模型推理太快","数据太少"],"answer":[0],"explain":"如果训练数据里存在历史偏见（如性别、地域），模型会把它学下来并放大，导致不公平的决策。","cat":"伦理与安全","diff":2,"src":"AI自练2"},{"id":"s2-42","stem":"使用 AI 时保护隐私错误的做法是（ ）。","options":["不输入身份证、银行卡信息","脱敏隐私数据","上传全部个人隐私数据提问","选用合规平台"],"answer":[2],"explain":"把隐私数据整包上传给 AI 是最危险的做法；应最小化输入、脱敏处理，并选择合规平台。","cat":"伦理与安全","diff":1,"src":"AI自练2"},{"id":"s2-43","stem":"AI 生成内容版权说法正确的是（ ）。","options":["AI 拥有独立著作权","人类具备创造性投入可享有相关权益","全部内容可随意商用","无任何版权限制"],"answer":[1],"explain":"目前主流规则是：AI 本身不是作者，人类若有实质性创造性投入，可对成果主张相应权益；商用仍需注意授权。","cat":"伦理与安全","diff":3,"src":"AI自练2"},{"id":"s2-44","stem":"防范 AI 虚假信息错误的做法是（ ）。","options":["多方核验信息","查证来源","理性辨别 AI 生成内容","直接转发 AI 内容"],"answer":[3],"explain":"未经核验就转发会放大虚假信息；正确做法是查来源、多方比对、保持怀疑。","cat":"伦理与安全","diff":1,"src":"AI自练2"},{"id":"s2-45","stem":"人工智能伦理基本原则不包括（ ）。","options":["无限制自由使用","公平公正","安全可控","尊重隐私"],"answer":[0],"explain":"AI 伦理强调公平、透明、安全可控、尊重隐私、负责任；“无限制自由使用”与负责任原则相悖。","cat":"伦理与安全","diff":1,"src":"AI自练2"},{"id":"s2-46","stem":"利用 AI 制作、传播虚假信息属于（ ）。","options":["正常创作","技术创新","违规违法行为","合理使用"],"answer":[2],"explain":"编造并传播虚假信息可能违反《治安管理处罚法》《网络安全法》等，情节严重的还会承担刑事责任。","cat":"伦理与安全","diff":1,"src":"AI自练2"},{"id":"s2-47","stem":"AI 可解释性（可解释 AI）指（ ）。","options":["模型无需逻辑","可以清晰解释决策依据与原因","输出越长越好","参数量公开"],"answer":[1],"explain":"可解释性关注“为什么得出这个结论”，在医疗、金融、司法等高风险场景尤其重要。","cat":"伦理与安全","diff":3,"src":"AI自练2"},{"id":"s2-48","stem":"智能推荐算法可能带来的问题是（ ）。","options":["信息过量准确","网络提速","内容优质","信息茧房、片面认知"],"answer":[3],"explain":"推荐算法不断投喂相似内容，容易形成信息茧房，让人只看到自己想看的，认知变窄。","cat":"应用场景","diff":2,"src":"AI自练2"},{"id":"s2-49","stem":"合规使用 AI 的核心是（ ）。","options":["合法、正当、安全、负责任","随心所欲使用","突破限制使用","批量伪造内容"],"answer":[0],"explain":"合规的四个关键词：合法（不违法）、正当（目的正当）、安全（数据与系统安全）、负责任（可追溯、可问责）。","cat":"伦理与安全","diff":1,"src":"AI自练2"},{"id":"s2-50","stem":"深度伪造（Deepfake）指（ ）。","options":["用深度神经网络进行普通的图片美化","利用 AI 生成高度逼真、难以分辨真伪的伪造人脸、语音、音视频内容","把真实视频深度压缩","给视频增加深度立体特效"],"answer":[1],"explain":"Deepfake 用生成模型换脸、仿声、合成视频，逼真度高，已被用于诈骗和造谣，需要标识与法律约束。","cat":"伦理与安全","diff":2,"src":"AI自练2"},{"id":"s2-51","stem":"某智能音箱误采集了用户未授权的对话录音，正确的处理方式是（ ）。","options":["立即删除数据并关闭非必要采集功能","加密存储后用于改进语音识别模型","通知用户已采集但继续使用","停止采集，保留已获取的数据"],"answer":[0],"explain":"未经授权采集的数据应当删除，并关闭非必要采集；最小必要、告知同意是个人信息保护的基本原则。","cat":"伦理与安全","diff":2,"src":"AI自练2"},{"id":"s2-52","stem":"下列不属于人工智能应用的是（ ）。","options":["智能人脸识别","AI 语音转文字","人工手动填表","智能分析"],"answer":[2],"explain":"人工手动填表是纯人工操作，没有任何智能算法参与；其余三项都有 AI 技术在背后。","cat":"应用场景","diff":1,"src":"AI自练2"},{"id":"s2-53","stem":"计算机视觉主要应用不包括（ ）。","options":["人脸识别","文本翻译","路况识别","病虫害识别"],"answer":[1],"explain":"文本翻译属于自然语言处理（NLP）；人脸、路况、病虫害识别都是“看”的任务，属于计算机视觉。","cat":"应用场景","diff":1,"src":"AI自练2"},{"id":"s2-54","stem":"NLP 自然语言处理无法完成的是（ ）。","options":["机器翻译","文本摘要","情感分析","物体测距拍照"],"answer":[3],"explain":"物体测距拍照是计算机视觉+传感器的工作；翻译、摘要、情感分析都是 NLP 的经典任务。","cat":"应用场景","diff":1,"src":"AI自练2"},{"id":"s2-55","stem":"智能客服主要依托的技术是（ ）。","options":["自然语言处理","图像识别","视频剪辑","加密算法"],"answer":[0],"explain":"智能客服要理解用户用自然语言提的问题并生成回答，核心是 NLP 与大模型。","cat":"应用场景","diff":1,"src":"AI自练2"},{"id":"s2-56","stem":"AI 辅助编程的优势是（ ）。","options":["完全替代程序员","代码零错误","提升编码效率、辅助查错","无需学习代码"],"answer":[2],"explain":"AI 编程助手能补全代码、解释报错、生成测试，显著提效，但不能替代人的设计与审查，也做不到零错误。","cat":"应用场景","diff":1,"src":"AI自练2"},{"id":"s2-57","stem":"智慧农业的 AI 应用是（ ）。","options":["人工浇水","无人机 AI 识别病虫害","手动播种","人工除草"],"answer":[1],"explain":"无人机航拍 + 视觉模型识别病虫害、估算长势，是智慧农业的典型应用；其余三项都是纯人工。","cat":"应用场景","diff":1,"src":"AI自练2"},{"id":"s2-58","stem":"智能交通 AI 的作用不包括（ ）。","options":["车流监测","违章识别","智能疏导","人为制造拥堵"],"answer":[3],"explain":"AI 交通的目标是监测、识别、疏导、优化信号灯；“人为制造拥堵”显然不是它的作用。","cat":"应用场景","diff":1,"src":"AI自练2"},{"id":"s2-59","stem":"大模型辅助学习的正确用法是（ ）。","options":["答疑解惑、辅助理解、拓展知识","直接抄答案应付考试","完全依赖 AI 不动脑","生成虚假作业"],"answer":[0],"explain":"把 AI 当“随叫随到的助教”：追问原理、要例子、让它出题考你，而不是替你写作业。","cat":"应用场景","diff":1,"src":"AI自练2"},{"id":"s2-60","stem":"生成式 AI 绘图属于（ ）。","options":["传统手工创作","数据存储技术","多模态 AIGC 应用","网络传输技术"],"answer":[2],"explain":"文生图模型把文本映射成图像，属于跨模态的 AIGC 应用，代表有 Stable Diffusion、Midjourney。","cat":"AIGC与应用","diff":1,"src":"AI自练2"},{"id":"s2-61","stem":"人工智能未来发展趋势错误的是（ ）。","options":["多模态融合加深","彻底无需人类参与","行业落地更深入","安全合规更完善"],"answer":[1],"explain":"AI 越强越需要人类监督、审核与治理，“彻底无需人类参与”既不现实也不安全。","cat":"AI基础","diff":1,"src":"AI自练2"},{"id":"s2-62","stem":"智能问答机器人的核心依托是（ ）。","options":["人工实时回复","固定模板","大模型自然语言理解","数据库查询"],"answer":[2],"explain":"现代问答机器人靠大模型理解意图、组织答案，必要时再结合知识库检索；固定模板早已是过去式。","cat":"应用场景","diff":1,"src":"AI自练2"},{"id":"x-01","stem":"机器学习中，验证集（Validation Set）的主要作用是（ ）。","options":["训练模型参数","调整超参数、选择模型并防止过拟合","最终评估模型泛化能力","存放原始数据"],"answer":[1],"explain":"验证集用来调超参数、早停和选模型；测试集只在最后用一次，才是对泛化能力的最终评估。","cat":"机器学习","diff":2,"src":"自编"},{"id":"x-02","stem":"某疾病筛查模型把 1000 人全判为“健康”，下列说法正确的是（ ）。","options":["准确率很高，但召回率为 0，模型没有实用价值","准确率低，模型很好","精确率和召回率都很高","无法判断"],"answer":[0],"explain":"若 990 人健康，全判健康准确率 99%，但一个病人都没查出来（召回率 0）。类别不平衡时不能只看准确率。","cat":"机器学习","diff":4,"src":"自编"},{"id":"x-03","stem":"在二分类任务中，召回率（Recall）衡量的是（ ）。","options":["预测为正的样本里有多少真的是正","真实为正的样本里有多少被找了出来","预测正确的样本占总样本的比例","模型训练的速度"],"answer":[1],"explain":"召回率 = 找出的正例 / 全部真实正例，关心“有没有漏”；精确率关心“报出来的准不准”。","cat":"机器学习","diff":3,"src":"自编"},{"id":"x-04","stem":"学习率（Learning Rate）设置过大会导致（ ）。","options":["训练极慢但一定收敛","损失震荡甚至发散，难以收敛","模型参数不再更新","必然过拟合"],"answer":[1],"explain":"学习率是每步更新的幅度：太大容易跨过最优点来回震荡，太小则训练缓慢。","cat":"机器学习","diff":2,"src":"自编"},{"id":"x-05","stem":"梯度下降法的基本思想是（ ）。","options":["随机猜测参数直到正确","沿着损失函数下降最快的方向逐步调整参数","一次性算出最优解","增加训练数据量"],"answer":[1],"explain":"梯度指向损失上升最快的方向，所以沿负梯度走一小步就能让损失下降，反复迭代直到收敛。","cat":"机器学习","diff":2,"src":"自编"},{"id":"x-06","stem":"下列关于“参数”和“超参数”的说法，正确的是（ ）。","options":["两者都由训练自动学习得到","参数由训练学习得到，超参数由人预先设定","超参数由训练学习得到，参数由人设定","两者没有区别"],"answer":[1],"explain":"权重、偏置是参数，靠训练学；学习率、批大小、层数是超参数，靠人调或搜索。","cat":"机器学习","diff":2,"src":"自编"},{"id":"x-07","stem":"数据增强（Data Augmentation）在图像任务中的典型做法是（ ）。","options":["删除一半训练样本","对图片做翻转、裁剪、旋转、加噪等变换","把标签全部改成同一类","减少训练轮数"],"answer":[1],"explain":"数据增强在不增加真实采集成本的前提下扩充样本多样性，能有效缓解过拟合、提升鲁棒性。","cat":"机器学习","diff":2,"src":"自编"},{"id":"x-08","stem":"L2 正则化（权重衰减）的主要作用是（ ）。","options":["让权重变大以增强表达","惩罚过大的权重，抑制过拟合","加快推理速度","增加模型层数"],"answer":[1],"explain":"L2 在损失里加上权重平方和，逼迫权重保持较小，模型更平滑，从而降低过拟合。","cat":"机器学习","diff":3,"src":"自编"},{"id":"x-09","stem":"K 折交叉验证的主要目的是（ ）。","options":["增加训练数据","更稳定地评估模型性能、充分利用数据","加快训练速度","减少模型参数"],"answer":[1],"explain":"把数据分成 K 份轮流做验证，取平均结果，评估更稳，尤其在数据量小时很实用。","cat":"机器学习","diff":3,"src":"自编"},{"id":"x-10","stem":"决策树模型最容易出现的问题是（ ）。","options":["无法处理分类问题","树太深导致过拟合","不能处理数值特征","训练不需要数据"],"answer":[1],"explain":"决策树不断分裂，树越深越容易把训练样本“切”得过于细碎，需要用剪枝、限制深度来抑制过拟合。","cat":"机器学习","diff":2,"src":"自编"},{"id":"x-11","stem":"随机森林（Random Forest）属于（ ）。","options":["单个决策树","集成学习方法","神经网络","聚类算法"],"answer":[1],"explain":"随机森林训练多棵决策树并投票/平均，属于 Bagging 集成学习，比单棵树更稳、更不容易过拟合。","cat":"机器学习","diff":2,"src":"自编"},{"id":"x-12","stem":"K-means 算法属于（ ）。","options":["监督学习中的回归","无监督学习中的聚类","强化学习","半监督分类"],"answer":[1],"explain":"K-means 不需要标签，按距离把样本分到 K 个簇并迭代更新中心，是经典无监督聚类算法。","cat":"机器学习","diff":2,"src":"自编"},{"id":"x-13","stem":"“偏差—方差”权衡中，模型过于简单通常表现为（ ）。","options":["高偏差（欠拟合）","高方差（过拟合）","偏差方差都为零","与模型复杂度无关"],"answer":[0],"explain":"模型太简单 → 高偏差、欠拟合；模型太复杂 → 高方差、过拟合。调模型就是在这两者间找平衡。","cat":"机器学习","diff":4,"src":"自编"},{"id":"x-14","stem":"神经网络中激活函数的主要作用是（ ）。","options":["增加显存占用","引入非线性，使网络能拟合复杂关系","降低学习率","替代损失函数"],"answer":[1],"explain":"没有激活函数，多层线性变换叠加还是线性的；ReLU、Sigmoid 等非线性让网络具备强大表达能力。","cat":"深度学习","diff":3,"src":"自编"},{"id":"x-15","stem":"反向传播（Backpropagation）算法的作用是（ ）。","options":["把数据从输出层传到输入层","利用链式法则计算各层梯度，从而更新参数","随机初始化权重","增加网络层数"],"answer":[1],"explain":"前向传播算输出和损失，反向传播用链式法则把误差逐层回传，得到每个参数的梯度。","cat":"深度学习","diff":3,"src":"自编"},{"id":"x-16","stem":"LSTM 相比普通 RNN 的主要优势是（ ）。","options":["参数更少","通过门控机制缓解梯度消失，能记住更长距离的信息","不需要训练","只能处理图像"],"answer":[1],"explain":"LSTM 用输入门、遗忘门、输出门控制信息流，缓解了 RNN 的长程依赖和梯度消失问题。","cat":"深度学习","diff":4,"src":"自编"},{"id":"x-17","stem":"生成对抗网络（GAN）由哪两部分组成（ ）。","options":["编码器和解码器","生成器和判别器","卷积层和池化层","输入层和输出层"],"answer":[1],"explain":"生成器造假样本，判别器辨别真假，两者对抗博弈，最终生成器能造出以假乱真的内容。","cat":"深度学习","diff":3,"src":"自编"},{"id":"x-18","stem":"卷积神经网络中“池化层（Pooling）”的主要作用是（ ）。","options":["增加特征图数量","降低特征图尺寸、减少计算量并增强平移不变性","把图像放大","生成新的训练数据"],"answer":[1],"explain":"最大池化/平均池化在局部区域取代表值，压缩空间尺寸，保留主要特征，同时让小范围位移不影响结果。","cat":"深度学习","diff":3,"src":"自编"},{"id":"x-19","stem":"迁移学习（Transfer Learning）的核心思想是（ ）。","options":["把模型从一台机器搬到另一台","把在大数据集上学到的知识迁移到新任务，减少新任务的训练成本","把数据迁移到云端","把模型翻译成另一种语言"],"answer":[1],"explain":"先在大规模数据上预训练，再在小数据集上微调，这是当今 AI 落地最常用的范式。","cat":"深度学习","diff":2,"src":"自编"},{"id":"x-20","stem":"大模型中的“token”指的是（ ）。","options":["一种加密货币","模型处理文本的基本单位，可以是字、词或词片段","显卡的显存单位","训练数据的文件格式"],"answer":[1],"explain":"模型先把文本切成 token 再计算，中文一个 token 约等于 1~2 个汉字，计费和上下文长度都按 token 算。","cat":"大模型原理","diff":2,"src":"自编"},{"id":"x-21","stem":"调节大模型的 temperature 参数，主要影响（ ）。","options":["模型的参数量","输出的随机性/创造性：越低越稳定保守，越高越发散多样","训练速度","上下文长度"],"answer":[1],"explain":"温度低时概率分布更尖锐，输出更确定；温度高时更随机。写代码用低温，写文案可用高温。","cat":"大模型原理","diff":3,"src":"自编"},{"id":"x-22","stem":"Few-shot（少样本）提示是指在提示词中（ ）。","options":["只给一句指令","给出几个“输入→输出”示例，让模型照着做","把模型参数减少","让模型训练几轮"],"answer":[1],"explain":"给 2~5 个示例，模型就能模仿格式和风格，这叫上下文学习（In-Context Learning），不需要改参数。","cat":"AIGC与应用","diff":3,"src":"自编"},{"id":"x-23","stem":"向量数据库在大模型应用中的主要作用是（ ）。","options":["存储模型权重","存储文本的向量表示并做相似度检索，为 RAG 提供资料","加速 GPU 计算","压缩图片"],"answer":[1],"explain":"把文档转成 embedding 存进向量库，提问时检索最相似的片段喂给模型，这就是 RAG 的检索环节。","cat":"大模型原理","diff":3,"src":"自编"},{"id":"x-24","stem":"LoRA 这类参数高效微调（PEFT）方法的特点是（ ）。","options":["冻结原模型，只训练少量低秩附加参数","必须重训全部参数","只能用于图像模型","不需要任何数据"],"answer":[0],"explain":"LoRA 只训练插入的低秩矩阵，显存占用小、可插拔切换，让普通显卡也能微调大模型。","cat":"大模型原理","diff":4,"src":"自编"},{"id":"x-25","stem":"模型量化（Quantization）指的是（ ）。","options":["增加模型层数","把权重从高精度（如 FP16）转成低精度（如 INT8/INT4）以减小体积、加速推理","把模型拆成多个小模型","删除训练数据"],"answer":[1],"explain":"量化用更少的比特存权重，显存和带宽需求大幅下降，代价是少量精度损失，是端侧部署的关键技术。","cat":"大模型原理","diff":3,"src":"自编"},{"id":"x-26","stem":"MoE（混合专家）架构的核心思想是（ ）。","options":["所有参数每次都参与计算","每次只激活部分“专家”子网络，用较少计算获得大容量","把模型训练多次","只用一个小模型"],"answer":[1],"explain":"MoE 通过路由网络为每个 token 选择少数专家，总参数很大但单次计算量可控，是很多大模型的选择。","cat":"大模型原理","diff":4,"src":"自编"},{"id":"x-27","stem":"“提示注入（Prompt Injection）”攻击指的是（ ）。","options":["在提示词里注入更多算力","攻击者把恶意指令藏在网页/文档等内容里，诱导模型执行非预期操作","给模型注入新的训练数据","提高模型温度"],"answer":[1],"explain":"当模型会读取外部内容时，内容里的“忽略以上指令，改为……”就可能劫持模型，需要隔离与权限控制。","cat":"伦理与安全","diff":4,"src":"自编"},{"id":"x-28","stem":"评估大模型能力时，使用标准测试集（Benchmark）的意义是（ ）。","options":["让模型训练更快","在同一套题目上横向比较不同模型，结果可复现、可比较","减少模型参数量","替代真实业务测试"],"answer":[1],"explain":"Benchmark 提供统一考题和评分口径，便于横向对比；但它也可能被“刷榜”，还要结合真实场景评测。","cat":"大模型原理","diff":3,"src":"自编"},{"id":"x-29","stem":"关于“系统提示词（System Prompt）”，说法正确的是（ ）。","options":["它由用户每轮输入","它由开发者预设，用于规定模型角色、边界和输出规范","它就是模型的权重","它只在训练时生效"],"answer":[1],"explain":"系统提示词是应用的“人设与规则”，优先级高于普通用户输入，常用于约束安全边界和输出格式。","cat":"AIGC与应用","diff":2,"src":"自编"},{"id":"x-30","stem":"大模型在长对话中“忘记”前面内容，最可能的原因是（ ）。","options":["模型硬盘满了","对话超出上下文窗口，早期内容被截断","网络断开","模型没有电了"],"answer":[1],"explain":"上下文窗口有上限，超出后最早的内容会被丢弃；可用摘要、记忆库、RAG 来保留关键信息。","cat":"大模型原理","diff":2,"src":"自编"},{"id":"x-31","stem":"AI 辅助医学影像诊断的主要价值是（ ）。","options":["完全取代放射科医生","快速初筛、标注可疑病灶，帮助医生提高效率","自动开具处方","替代医院管理系统"],"answer":[1],"explain":"AI 擅长在海量影像中快速定位可疑区域，最终诊断与责任仍由医生承担，属于“辅助”而非“替代”。","cat":"应用场景","diff":2,"src":"自编"},{"id":"x-32","stem":"按照 SAE 分级，L5 级自动驾驶意味着（ ）。","options":["完全由人驾驶","在全部场景下由系统完成驾驶，无需人类接管","只在高速上辅助驾驶","只有自动泊车"],"answer":[1],"explain":"L0~L5 逐级提升：L2 是辅助驾驶，L4 是特定区域无人驾驶，L5 是全场景完全自动驾驶，目前尚未普及。","cat":"应用场景","diff":3,"src":"自编"},{"id":"x-33","stem":"体育训练中用计算机视觉做动作分析，主要依靠（ ）。","options":["语音识别","人体关键点检测与姿态估计","文本情感分析","数据库索引"],"answer":[1],"explain":"通过检测关节点、计算关节角度和轨迹，教练可以量化挥拍、起跳等动作，辅助纠正技术动作。","cat":"应用场景","diff":2,"src":"自编"},{"id":"x-34","stem":"语音助手“听写”和“说话”分别对应的技术是（ ）。","options":["TTS 和 ASR","ASR（语音识别）和 TTS（语音合成）","CV 和 NLP","OCR 和 TTS"],"answer":[1],"explain":"ASR 把声音转成文字（听写），TTS 把文字转成声音（说话），两者常合称语音交互。","cat":"应用场景","diff":2,"src":"自编"},{"id":"x-35","stem":"OCR 技术的作用是（ ）。","options":["把图片中的文字识别成可编辑文本","把文字转成语音","给图片加水印","压缩图片体积"],"answer":[0],"explain":"OCR（光学字符识别）把扫描件、照片里的文字提取出来，是票据识别、证件录入的基础技术。","cat":"应用场景","diff":1,"src":"自编"},{"id":"x-36","stem":"我国《个人信息保护法》对 AI 应用提出的核心要求是（ ）。","options":["可以随意收集个人信息","处理个人信息应遵循合法、正当、必要和诚信原则，取得同意","只要加密就能随便用","只约束国外企业"],"answer":[1],"explain":"最小必要、告知同意、目的限定是核心；AI 训练和使用个人数据同样受法律约束。","cat":"伦理与安全","diff":3,"src":"自编"},{"id":"x-37","stem":"根据我国相关规定，对 AI 生成的图片、视频等内容，平台和发布者应当（ ）。","options":["隐去来源，当作真实拍摄","按规定添加显著标识，防止公众误认","禁止一切 AI 创作","无需任何标注"],"answer":[1],"explain":"《人工智能生成合成内容标识办法》要求对 AI 生成内容添加显式/隐式标识，保障公众知情权。","cat":"伦理与安全","diff":3,"src":"自编"},{"id":"x-38","stem":"训练数据中若大量包含某类群体的负面刻板印象，最可能导致（ ）。","options":["模型训练更快","模型输出歧视性、不公平的内容","模型体积变小","模型不会出现幻觉"],"answer":[1],"explain":"模型会复制数据中的偏见，所以数据审核、去偏、评测是 AI 治理的重要环节。","cat":"伦理与安全","diff":2,"src":"自编"},{"id":"x-39","stem":"“AI 换脸”视频被用于冒充亲友借钱，这属于（ ）。","options":["合法娱乐","深度伪造型诈骗，违法","正常的 AI 应用","个人自由"],"answer":[1],"explain":"利用深度伪造实施诈骗触犯法律；收到涉及转账的视频/语音请求，务必通过其他渠道二次核实。","cat":"伦理与安全","diff":1,"src":"自编"},{"id":"x-40","stem":"下列关于“大模型会取代程序员”的说法，最合理的是（ ）。","options":["完全正确，程序员将消失","错误，AI 提升效率但需求分析、架构设计、审核仍需要人","AI 只能写注释","AI 只能写前端代码"],"answer":[1],"explain":"AI 把重复编码自动化，人的价值转向定义问题、设计系统、审查结果和承担责任。","cat":"AI基础","diff":1,"src":"自编"},{"id":"x-41","stem":"“数据标注”质量差最直接的后果是（ ）。","options":["训练速度变快","模型学到错误的对应关系，效果和可靠性下降","模型参数量变少","显存占用降低"],"answer":[1],"explain":"标注就是给模型看的“标准答案”，答案错了，模型学得越认真错得越离谱。","cat":"数据与算力","diff":1,"src":"自编"},{"id":"x-42","stem":"下列做法中最能降低大模型幻觉风险的是（ ）。","options":["把 temperature 调到最高","要求模型基于给定资料回答，并给出出处，配合 RAG 检索","让模型回答得更长","换一个更花的界面"],"answer":[1],"explain":"“有据可查”是对抗幻觉最有效的手段：限定资料范围、要求引用来源、再用检索补充实时知识。","cat":"大模型原理","diff":3,"src":"自编"},{"id":"x-43","stem":"大模型“越狱（Jailbreak）”指的是（ ）。","options":["让模型运行得更快","通过特殊提示绕过模型的安全限制，诱导其输出被禁止的内容","把模型部署到手机上","给模型增加新语言"],"answer":[1],"explain":"越狱利用角色扮演、编码绕过等手法突破安全对齐，是 AI 安全攻防的常见议题。","cat":"伦理与安全","diff":3,"src":"自编"},{"id":"x-44","stem":"如果一个 AI 系统在训练集上表现完美，但在真实用户数据上频繁出错，最应该优先检查（ ）。","options":["显示器分辨率","训练数据与真实数据分布是否一致（数据偏移）","键盘布局","网络带宽"],"answer":[1],"explain":"训练分布与线上分布不一致（data drift）是上线后效果暴跌的常见原因，需要持续监控与再训练。","cat":"机器学习","diff":4,"src":"自编"}];
+const META = {"title": "AI 通识自练 · 交大版", "updated": "2026-11-06", "cats": {"AI基础": "AI基础", "机器学习": "机器学习", "深度学习": "深度学习", "大模型原理": "大模型原理", "AIGC与应用": "AIGC与应用", "数据与算力": "数据与算力", "应用场景": "应用场景", "伦理与安全": "伦理与安全"}, "sets": {"AI自练1": "雨课堂 AI自练1", "AI自练2": "雨课堂 AI自练2", "自编": "按知识点自编"}};
+</script>
+<script>
+/* ============ 状态 ============ */
+const LS_KEY = 'aiQuiz.v3';
+const defaultState = () => ({
+  v:3,
+  settings:{theme:'auto', shuffle:true, instant:true, autoNext:false, examCount:30, examMinutes:0, fontScale:1},
+  seen:{},          // qid -> {n, ok, bad, lastOk, lastAt, star}
+  session:null,     // {kind, ids, idx, answers:{qid:[keys]}, startedAt, title}
+  exam:null,        // {ids, answers, startedAt, endsAt, submitted}
+  wrongNotes:{},    // qid -> 用户写下的错因/笔记
+  sync:{token:'', gist:'', last:'', auto:true},
+  history:[]        // 考试记录
+});
+let S = load();
+function load(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return defaultState();
+    const s = JSON.parse(raw);
+    return Object.assign(defaultState(), s, {settings:Object.assign(defaultState().settings, s.settings||{}), sync:Object.assign(defaultState().sync, s.sync||{})});
+  }catch(e){ return defaultState(); }
+}
+let saveTimer=null, syncing=false;
+function save(now, noSync){
+  clearTimeout(saveTimer);
+  const write=()=>{ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){ toast('保存失败：存储空间不足'); } };
+  if(now) write(); else saveTimer=setTimeout(write, 250);
+  if(!syncing && !noSync && S.sync.auto && S.sync.token && S.sync.gist) scheduleSync();
+}
+/* ============ 工具 ============ */
+const $ = sel => document.querySelector(sel);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LETTERS = ['A','B','C','D','E','F'];
+const byId = id => QB.find(q=>q.id===id);
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
+function toast(msg,ms=1800){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'), ms); }
+
+/* 内联 SVG 图标，避免不同系统 emoji 字体缺失显示成方框 */
+const ICON = {
+  home:'<path d="M3 11.2 12 4l9 7.2V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  book:'<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5"/>',
+  chart:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/>',
+  list:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+  dice:'<rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="8.5" cy="15.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor" stroke="none"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>',
+  exam:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5V3h6v1.5M9 10h6M9 14h6M9 18h4"/>',
+  loop:'<path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+  download:'<path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/>',
+  upload:'<path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 21h16"/>',
+  grid:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  back:'<path d="M15 18l-6-6 6-6"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  star:'<path d="M12 3.5l2.7 5.5 6 .9-4.4 4.2 1 6-5.3-2.8-5.3 2.8 1-6L3.3 9.9l6-.9z"/>'
+};
+function icon(name, size){
+  const sz = size || 20;
+  return '<svg class="svgico" width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block">'+(ICON[name]||'')+'</svg>';
+}
+
+function stars(n){ n=Math.max(1,Math.min(5,n||1)); return '<span class="stars">'+'★'.repeat(n)+'<span class="off">'+'★'.repeat(5-n)+'</span></span>'; }
+function catName(c){ return (META.cats&&META.cats[c]) || c || '综合'; }
+function pct(a,b){ return b? Math.round(a/b*100):0; }
+function fmtTime(ms){ if(ms<0) ms=0; const s=Math.floor(ms/1000), h=Math.floor(s/3600), m=Math.floor(s%3600/60), ss=s%60;
+  return (h?h+':':'')+String(m).padStart(2,'0')+':'+String(ss).padStart(2,'0'); }
+function fmtDate(t){ const d=new Date(t); const p=n=>String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes()); }
+
+/* 题目选项乱序：每次进入题目时生成，答案按内容匹配 */
+const viewCache = new Map(); // qid -> {opts:[{key,text,orig}], order}
+function shuffledOpts(q){
+  const c = viewCache.get(q.id);
+  if(c) return c;
+  let opts = q.options.map((o,i)=>({text:o, orig:i}));
+  if(S.settings.shuffle) opts = shuffle(opts);
+  const v = {opts: opts.map((o,i)=>({key:LETTERS[i], text:o.text, orig:o.orig})), _t:Date.now()};
+  viewCache.set(q.id, v);
+  return v;
+}
+function clearViewCache(){ viewCache.clear(); }
+function isCorrect(q, picked){
+  const v = shuffledOpts(q);
+  const want = q.answer.map(i=>v.opts.find(o=>o.orig===i).key).sort().join('');
+  return picked.slice().sort().join('')===want;
+}
+function answerText(q){
+  const v = shuffledOpts(q);
+  return q.answer.map(i=>{ const o=v.opts.find(x=>x.orig===i); return o? o.key+'. '+o.text : ''; }).join('；');
+}
+
+/* ============ 记录 ============ */
+function record(qid, ok){
+  const r = S.seen[qid] || {n:0, ok:0, bad:0, lastOk:null, lastAt:0, star:0, streak:0};
+  r.n++; r.lastAt = Date.now(); r.lastOk = ok;
+  if(ok){
+    r.ok++; r.streak=(r.streak||0)+1;
+    if(r.bad>0 && r.streak>=2) r.mastered=1;      // 错题连对两次自动移出
+  }else{
+    r.bad++; r.streak=0; r.mastered=0;
+  }
+  S.seen[qid] = r;
+}
+function statAll(){
+  const ids = Object.keys(S.seen);
+  let done=0, ok=0, bad=0;
+  ids.forEach(id=>{ const r=S.seen[id]; if(r.n>0) done++; ok+=r.ok; bad+=r.bad; });
+  return {total:QB.length, done, ok, bad, rate: ok+bad? Math.round(ok/(ok+bad)*100):0};
+}
+function wrongList(){
+  return QB.filter(q=>S.seen[q.id] && S.seen[q.id].bad>0 && !S.seen[q.id].mastered);
+}
+function masteredCount(){ return QB.filter(q=>S.seen[q.id]&&S.seen[q.id].mastered).length; }
+
+/* ============ 路由 ============ */
+let route = {name:'home'};
+function go(name, params){ route = Object.assign({name}, params||{}); render(); window.scrollTo(0,0); }
+function render(){
+  const r = route.name;
+  if(r==='home') renderHome();
+  else if(r==='practice') renderPractice();
+  else if(r==='exam') renderExam();
+  else if(r==='examResult') renderExamResult();
+  else if(r==='wrong') renderWrong();
+  else if(r==='stats') renderStats();
+  else if(r==='more') renderMore();
+  else if(r==='print') renderPrint();
+  document.querySelectorAll('#tabbar button').forEach(b=>{
+    const t=b.dataset.tab; b.classList.toggle('on', t===r || (r==='practice'&&t==='home'));
+  });
+  $('#tabbar').style.display = (r==='practice'||r==='exam'||r==='examResult'||r==='print')?'none':'';
+  applyTheme();
+}
+function applyTheme(){
+  const t=S.settings.theme;
+  const dark = t==='dark' || (t==='auto' && !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches));
+  document.documentElement.dataset.theme = dark?'dark':'light';
+  document.querySelector('meta[name=theme-color]').setAttribute('content', dark?'#0f1520':'#f4f6fa');
+}
+function topbar(title, back, right){
+  return `<div class="topbar noprint"><div class="topbar-in">
+    ${back!==false?`<button class="iconbtn" onclick="${back||"go('home')"}">${icon('back',20)}</button>`:''}
+    <h1>${esc(title)}</h1>${right||''}</div></div>`;
+}
+/* ============ 首页 ============ */
+function renderHome(){
+  const st = statAll();
+  const wrongN = wrongList().length;
+  const sess = S.session;
+  const resumed = sess && sess.ids && sess.idx>0 ? `<div class="card pad" style="margin-bottom:12px">
+      <div class="between"><div><b>上次刷到 ${sess.idx+1}/${sess.ids.length}</b>
+      <div class="small muted">${esc(sess.title||'')} · ${fmtDate(sess.startedAt||Date.now())}</div></div>
+      <button class="btn soft" onclick="resumeSession()">继续</button></div></div>` : '';
+  $('#root').innerHTML = `
+  ${topbar('AI 通识刷题', false, `<button class="iconbtn" onclick="go('more')">${icon('gear',18)}</button>`)}
+  <div class="wrap" style="padding-bottom:86px">
+    <div class="hero">
+      <h2>${esc(META.title)}</h2>
+      <p>共 ${QB.length} 题 · ${Object.keys(META.cats||{}).length} 个知识点 · 已做 ${st.done} 题 · 正确率 ${st.rate}%</p>
+      <div class="progress" style="margin-top:12px;background:rgba(255,255,255,.25)"><i style="width:${pct(st.done,QB.length)}%;background:#fff"></i></div>
+    </div>
+    ${resumed}
+    <div class="modes" style="display:grid;gap:12px">
+      <button class="mode" onclick="startPractice('seq')">
+        <span class="ico">${icon('list',24)}</span><span><h3>顺序刷题</h3><p>从上次位置继续，一题一解析</p></span></button>
+      <button class="mode" onclick="startPractice('random')">
+        <span class="ico">${icon('dice',24)}</span><span><h3>随机刷题</h3><p>打乱顺序，适合考前快速过一遍</p></span></button>
+      <button class="mode" onclick="openTopicSheet()">
+        <span class="ico">${icon('target',24)}</span><span><h3>按知识点 / 难度</h3><p>只刷薄弱环节，比如「大模型」或 4★ 难题</p></span></button>
+      <button class="mode" onclick="startExam()">
+        <span class="ico">${icon('exam',24)}</span><span><h3>模拟考试</h3><p>限时 ${S.settings.examCount} 题，交卷后给分数和逐题解析</p></span></button>
+      <button class="mode" onclick="go('wrong')">
+        <span class="ico">${icon('loop',24)}</span><span><h3>错题集 <span class="badge bad">${wrongN}</span></h3><p>重刷错题，连对 2 次自动移出</p></span></button>
+    </div>
+    <div class="card pad" style="margin-top:14px">
+      <div class="between"><b>数据</b><span class="small muted">自动保存在本机</span></div>
+      <div class="grid2" style="margin-top:10px">
+        <button class="btn ghost" onclick="exportJSON()">导出进度文件</button>
+        <button class="btn ghost" onclick="importJSON()">导入进度文件</button>
+      </div>
+      <div class="small muted" style="margin-top:8px">手机↔电脑：到「设置」里填 GitHub Gist 令牌，可自动双向同步。</div>
+    </div>
+  </div>`;
+}
+
+/* ============ 刷题 ============ */
+let startIdx = 0;
+function startPractice(kind, ids, title){
+  startIdx = 0;
+  if(kind==='seq'){
+    // 顺序：按题库原顺序，从第一道没做过的题继续
+    ids = QB.map(q=>q.id);
+    const first = QB.findIndex(q=>!S.seen[q.id] || !S.seen[q.id].n);
+    startIdx = first < 0 ? 0 : first;
+  }else if(kind==='random'){ ids = shuffle(QB).map(q=>q.id); }
+  else if(kind==='wrong'){ ids = wrongList().map(q=>q.id); if(!ids.length) return toast('错题集是空的，先去刷几题吧'); title='错题重刷'; }
+  ids = ids.filter(id=>byId(id));
+  if(!ids.length) return toast('没有符合条件的题目');
+  clearViewCache();
+  S.session = {kind, ids, idx:startIdx, answers:{}, startedAt:Date.now(), title:title||modeTitle(kind)};
+  save(true); go('practice');
+}
+function modeTitle(k){ return {seq:'顺序刷题',random:'随机刷题',wrong:'错题重刷',topic:'专项刷题'}[k]||'刷题'; }
+function resumeSession(){ clearViewCache(); go('practice'); }
+function renderPractice(){
+  const sess = S.session;
+  if(!sess || !sess.ids || !sess.ids.length){ go('home'); return; }
+  const q = byId(sess.ids[sess.idx]);
+  if(!q){ go('home'); return; }
+  const v = shuffledOpts(q);
+  const picked = sess.answers[q.id];
+  const answered = !!picked;
+  const ok = answered && isCorrect(q, picked);
+  const r = S.seen[q.id]||{};
+  const head = `<div class="topbar noprint"><div class="topbar-in">
+      <button class="iconbtn" onclick="go('home')">${icon('back',20)}</button>
+      <h1>${esc(sess.title)}</h1>
+      <button class="iconbtn" onclick="openCardSheet()">${icon('grid',18)}</button></div>
+      <div class="wrap" style="padding-bottom:8px">
+        <div class="between small muted"><span>${sess.idx+1} / ${sess.ids.length}</span>
+        <span>${q.type==='multi'?'多选题':'单选题'}</span></div>
+        <div class="progress" style="margin-top:6px"><i style="width:${pct(sess.idx+1,sess.ids.length)}%"></i></div>
+      </div></div>`;
+  $('#root').innerHTML = head + `<div class="wrap" style="padding-top:14px;padding-bottom:120px">
+    <div class="card pad">
+      <div class="between" style="margin-bottom:10px">
+        <div class="row" style="gap:8px;flex-wrap:wrap">
+          <span class="badge">${esc(catName(q.cat))}</span>
+          ${stars(q.diff)}
+          ${r.bad>0?`<span class="badge bad">错过 ${r.bad} 次</span>`:''}
+        </div>
+        <button class="iconbtn" style="width:34px;height:34px;font-size:16px" onclick="toggleStar('${q.id}')">${(S.seen[q.id]&&S.seen[q.id].star)?'★':'☆'}</button>
+      </div>
+      <div style="font-size:17px;font-weight:600;line-height:1.7">${esc(q.stem)}</div>
+      <div style="margin-top:14px">
+        ${v.opts.map(o=>{
+          let cls='';
+          if(answered){
+            const isPicked = picked.includes(o.key);
+            const isAns = isCorrectKey(q,o);
+            if(isAns) cls='ok'; else if(isPicked) cls='bad';
+          }
+          return `<button class="opt ${cls}" ${answered?'disabled':''} onclick="pick('${o.key}')">
+            <span class="k">${o.key}</span><span class="t">${esc(o.text)}</span></button>`;
+        }).join('')}
+      </div>
+      ${answered?`<div class="explain">
+        <div class="verdict ${ok?'ok':'bad'}">${ok?icon('check',18):icon('x',18)}<span>${ok?'答对了':'答错了'}</span></div>
+        <div style="font-size:13px;color:var(--sub)">正确答案：<b style="color:var(--ink)">${esc(answerText(q))}</b></div>
+        <div style="margin-top:8px">${esc(q.explain||'暂无解析')}</div>
+      </div>`:''}
+    </div>
+    <div class="row noprint" style="margin-top:14px;gap:10px">
+      <button class="btn ghost" style="flex:1" ${sess.idx===0?'disabled':''} onclick="move(-1)">上一题</button>
+      <button class="btn" style="flex:1.6" onclick="${answered?'move(1)':'reveal()'}">${answered?(sess.idx===sess.ids.length-1?'完成':'下一题 →'):'看答案'}</button>
+    </div>
+    <div class="small muted center" style="margin-top:10px">
+      <span class="kbd">A</span>~<span class="kbd">D</span> 选择 · <span class="kbd">Enter</span> 下一题
+    </div>
+  </div>`;
+}
+function isCorrectKey(q,o){ return q.answer.includes(o.orig); }
+function pick(key){
+  const sess=S.session; if(!sess) return;
+  const q = byId(sess.ids[sess.idx]);
+  if(sess.answers[q.id]) return;
+  const v = shuffledOpts(q);
+  const multi = q.type==='multi';
+  if(multi){
+    const cur = sess.answers[q.id]||[];
+    const i = cur.indexOf(key);
+    if(i>=0) cur.splice(i,1); else cur.push(key);
+    sess.answers[q.id]=cur; save();
+    // 多选题需要单独的「确认」按钮
+    if(cur.length){ renderPractice(); return; }
+  }else{
+    sess.answers[q.id]=[key];
+  }
+  record(q.id, isCorrect(q, sess.answers[q.id]));
+  save(); renderPractice();
+}
+function reveal(){ // 直接看答案视为答错
+  const sess=S.session; const q=byId(sess.ids[sess.idx]);
+  if(!sess.answers[q.id] || !sess.answers[q.id].length){
+    sess.answers[q.id]=['-'];
+    record(q.id,false);
+    save(); renderPractice();
+  }
+}
+function move(d){
+  const sess=S.session; if(!sess) return;
+  if(d>0 && sess.idx>=sess.ids.length-1){ finishSession(); return; }
+  sess.idx = Math.max(0, Math.min(sess.ids.length-1, sess.idx+d));
+  save(); renderPractice(); window.scrollTo(0,0);
+}
+function finishSession(){
+  const sess=S.session; if(!sess) return;
+  let right=0, done=0;
+  sess.ids.forEach(id=>{ const a=sess.answers[id]; if(a&&a.length){done++; if(isCorrect(byId(id),a)) right++;} });
+  showSheet(`<h3>这一轮完成啦 🎉</h3>
+    <p class="small muted">共 ${sess.ids.length} 题，作答 ${done} 题，答对 ${right} 题，正确率 ${done?Math.round(right/done*100):0}%。</p>
+    <div class="grid2" style="margin-top:14px">
+      <button class="btn ghost" onclick="hideSheet();S.session=null;save();go('home')">回首页</button>
+      <button class="btn" onclick="hideSheet();S.session=null;save();go('wrong')">看错题</button>
+    </div>`);
+}
+function toggleStar(id){
+  const r = S.seen[id] || {n:0,ok:0,bad:0,star:0};
+  r.star = r.star?0:1; S.seen[id]=r; save(); renderPractice();
+}
+function openCardSheet(){
+  const sess=S.session; if(!sess) return;
+  const html = `<h3>答题卡</h3><div class="tile">
+    ${sess.ids.map((id,i)=>{
+      const q=byId(id); const a=sess.answers[id]; let cls='';
+      if(a && a.length) cls = isCorrect(q,a)?'ok':'bad';
+      if(i===sess.idx) cls+=' cur';
+      return `<button class="${cls}" onclick="jump(${i})">${i+1}</button>`;
+    }).join('')}</div>
+    <div class="small muted" style="margin-top:12px">绿色=答对，红色=答错，蓝框=当前题。</div>`;
+  showSheet(html);
+}
+function jump(i){ S.session.idx=i; save(); hideSheet(); renderPractice(); window.scrollTo(0,0); }
+function showSheet(html){
+  $('#sheetIn').innerHTML=`<button class="iconbtn" style="position:absolute;right:14px;top:14px;z-index:2" aria-label="关闭" onclick="hideSheet()">${icon('x',18)}</button>`+html;
+  $('#sheet').classList.add('open');
+}
+function hideSheet(){ $('#sheet').classList.remove('open'); }
+$('#sheet').addEventListener('click', e=>{ if(e.target.id==='sheet') hideSheet(); });
+
+/* ============ 专项 ============ */
+function openTopicSheet(){
+  const cats = {}; QB.forEach(q=>{ cats[q.cat]=(cats[q.cat]||0)+1; });
+  const d5 = QB.filter(q=>q.diff>=4).length;
+  const srcs = {}; QB.forEach(q=>{ srcs[q.src]=(srcs[q.src]||0)+1; });
+  showSheet(`<h3>按知识点刷</h3>
+    <div style="display:grid;gap:8px;max-height:52vh;overflow:auto">
+    ${Object.keys(cats).map(c=>`<button class="mode" style="padding:10px 12px;box-shadow:none"
+      onclick="startTopic('${c}')"><span class="ico" style="width:36px;height:36px;font-size:16px">🎯</span>
+      <span><h3 style="font-size:14px">${esc(catName(c))}</h3><p>${cats[c]} 题</p></span></button>`).join('')}
+    </div>
+    <hr><b class="small">按来源</b>
+    <div class="row" style="flex-wrap:wrap;gap:8px;margin-top:8px">
+      ${Object.keys(srcs).map(sc=>`<button class="btn soft" style="padding:8px 12px;font-size:13px" onclick="startSource('${sc}')">${esc(sc)} · ${srcs[sc]}</button>`).join('')}
+    </div>
+    <hr>
+    <div class="grid2">
+      <button class="btn ghost" style="padding:10px 8px;font-size:13px" onclick="startDiff(4)">4★ 以上 · ${d5} 题</button>
+      <button class="btn ghost" style="padding:10px 8px;font-size:13px" onclick="startPractice('random')">全部随机</button>
+    </div>`);
+}
+function startTopic(cat){
+  hideSheet();
+  const ids = shuffle(QB.filter(q=>q.cat===cat)).map(q=>q.id);
+  startPractice('topic', ids, '专项 · '+catName(cat));
+}
+function startSource(src){
+  hideSheet();
+  const ids = shuffle(QB.filter(q=>q.src===src)).map(q=>q.id);
+  startPractice('topic', ids, '专项 · '+src);
+}
+function startDiff(min){
+  hideSheet();
+  const ids = shuffle(QB.filter(q=>q.diff>=min)).map(q=>q.id);
+  startPractice('topic', ids, '专项 · '+min+'★以上');
+}
+/* ============ 考试 ============ */
+function startExam(){
+  const n = Math.min(S.settings.examCount||30, QB.length);
+  const ids = shuffle(QB).slice(0,n).map(q=>q.id);
+  clearViewCache();
+  const mins = S.settings.examMinutes || Math.ceil(n*1.2);
+  S.exam = {ids, answers:{}, idx:0, startedAt:Date.now(), endsAt:Date.now()+mins*60000, submitted:false, minutes:mins};
+  save(true); go('exam');
+}
+let examTimer=null;
+function renderExam(){
+  const ex=S.exam; if(!ex||ex.submitted){ go('home'); return; }
+  if(!examTimer){ examTimer = setInterval(()=>{ if(route.name==='exam') tick(); else {clearInterval(examTimer);examTimer=null;} }, 1000); }
+  const q = byId(ex.ids[ex.idx]); if(!q){ go('home'); return; }
+  const v = shuffledOpts(q);
+  const picked = ex.answers[q.id]||[];
+  const left = ex.endsAt - Date.now();
+  $('#root').innerHTML = `
+  <div class="exam-top">
+    <button class="btn ghost" style="padding:8px 12px" onclick="confirmQuitExam()">退出</button>
+    <div style="flex:1;text-align:center">
+      <div class="timer ${left<120000?'danger':''}" id="timer">${fmtTime(left)}</div>
+      <div class="tiny muted">${ex.idx+1} / ${ex.ids.length}</div>
+    </div>
+    <button class="btn" style="padding:8px 14px" onclick="openExamCard()">答题卡</button>
+  </div>
+  <div class="wrap" style="padding-top:14px;padding-bottom:120px">
+    <div class="card pad">
+      <div class="row" style="gap:8px;margin-bottom:10px"><span class="badge">${esc(catName(q.cat))}</span>${stars(q.diff)}</div>
+      <div style="font-size:17px;font-weight:600;line-height:1.7">${esc(q.stem)}</div>
+      <div style="margin-top:14px">
+        ${v.opts.map(o=>`<button class="opt ${picked.includes(o.key)?'sel':''}" onclick="examPick('${o.key}')">
+          <span class="k">${o.key}</span><span class="t">${esc(o.text)}</span></button>`).join('')}
+      </div>
+    </div>
+    <div class="row" style="margin-top:14px;gap:10px">
+      <button class="btn ghost" style="flex:1" ${ex.idx===0?'disabled':''} onclick="examMove(-1)">上一题</button>
+      <button class="btn" style="flex:1.6" onclick="examMove(1)">${ex.idx===ex.ids.length-1?'检查/交卷':'下一题 →'}</button>
+    </div>
+    <button class="btn block ghost" style="margin-top:10px" onclick="confirmSubmit()">交卷</button>
+  </div>`;
+}
+function tick(){
+  const ex=S.exam; if(!ex) return;
+  const left = ex.endsAt-Date.now();
+  const t=$('#timer'); if(t){ t.textContent=fmtTime(left); t.classList.toggle('danger',left<120000); }
+  if(left<=0) submitExam(true);
+}
+function examPick(key){
+  const ex=S.exam; const q=byId(ex.ids[ex.idx]);
+  if(q.type==='multi'){
+    const cur=ex.answers[q.id]||[]; const i=cur.indexOf(key);
+    if(i>=0)cur.splice(i,1); else cur.push(key);
+    ex.answers[q.id]=cur;
+  }else ex.answers[q.id]=[key];
+  save(); renderExam();
+}
+function examMove(d){ S.exam.idx=Math.max(0,Math.min(S.exam.ids.length-1,S.exam.idx+d)); save(); renderExam(); window.scrollTo(0,0); }
+function openExamCard(){
+  const ex=S.exam;
+  showSheet(`<h3>答题卡</h3><div class="tile">${ex.ids.map((id,i)=>{
+    const a=ex.answers[id]; let cls=a&&a.length?'ok':'';
+    if(i===ex.idx) cls+=' cur';
+    return `<button class="${cls}" onclick="S.exam.idx=${i};save();hideSheet();renderExam()">${i+1}</button>`;
+  }).join('')}</div><div class="small muted" style="margin-top:12px">绿色=已作答，灰色=未作答。</div>`);
+}
+function confirmSubmit(){
+  const ex=S.exam; const un = ex.ids.filter(id=>!(ex.answers[id]&&ex.answers[id].length)).length;
+  showSheet(`<h3>交卷确认</h3><p class="small muted">${un?`还有 <b>${un}</b> 题没作答，`:'全部已作答，'}交卷后立即出分并显示解析。</p>
+    <div class="row" style="margin-top:14px;gap:10px"><button class="btn ghost" style="flex:1" onclick="hideSheet()">再检查一下</button>
+    <button class="btn" style="flex:1" onclick="hideSheet();submitExam()">确认交卷</button></div>`);
+}
+function confirmQuitExam(){
+  showSheet(`<h3>退出考试？</h3><p class="small muted">本次作答不会计入统计，成绩作废。</p>
+    <div class="row" style="margin-top:14px;gap:10px"><button class="btn ghost" style="flex:1" onclick="hideSheet()">继续考试</button>
+    <button class="btn" style="flex:1" onclick="hideSheet();S.exam=null;save();go('home')">退出</button></div>`);
+}
+function submitExam(auto){
+  const ex=S.exam; if(!ex) return;
+  clearInterval(examTimer); examTimer=null;
+  let right=0;
+  ex.ids.forEach(id=>{ const q=byId(id); const a=ex.answers[id]; if(!a||!a.length) return;  // 未作答不计入错题
+    const ok = isCorrect(q,a); if(ok) right++; record(id, ok); });
+  ex.submitted=true; ex.right=right; ex.used=Date.now()-ex.startedAt;
+  S.history.unshift({at:Date.now(), total:ex.ids.length, right, used:ex.used, auto:!!auto});
+  S.history = S.history.slice(0,50);
+  save(true); go('examResult');
+}
+let examOnlyWrong=false;
+function pickedText(q,a){
+  if(!a||!a.length) return '未答';
+  const v=shuffledOpts(q);
+  return a.map(k=>{ const o=v.opts.find(x=>x.key===k); return o? k+'. '+esc(o.text) : k; }).join('；');
+}
+function renderExamResult(){
+  const ex=S.exam; if(!ex||!ex.submitted){ go('home'); return; }
+  const sc = Math.round(ex.right/ex.ids.length*100);
+  const wrongN = ex.ids.filter(id=>{ const a=ex.answers[id]; return !(a&&a.length)||!isCorrect(byId(id),a); }).length;
+  $('#root').innerHTML = `
+  ${topbar('考试结果', false)}
+  <div class="wrap" style="padding-top:14px">
+    <div class="card pad center">
+      <div style="font-size:40px;font-weight:800;color:${sc>=80?'var(--ok)':sc>=60?'var(--warn)':'var(--bad)'}">${sc}<span style="font-size:18px">分</span></div>
+      <div class="muted small">答对 ${ex.right} / ${ex.ids.length} · 用时 ${fmtTime(ex.used)} · 错 ${wrongN} 题</div>
+    <div class="row" style="justify-content:center;gap:8px;margin-top:12px">
+      <button class="btn ${examOnlyWrong?'ghost':''}" style="padding:7px 14px;font-size:13px" onclick="examOnlyWrong=false;renderExamResult()">全部</button>
+      <button class="btn ${examOnlyWrong?'':'ghost'}" style="padding:7px 14px;font-size:13px" onclick="examOnlyWrong=true;renderExamResult()">只看错题</button>
+    </div>
+    </div>
+    <div style="margin-top:12px;display:grid;gap:12px">
+      ${ex.ids.map((id,i)=>({id,i})).filter(({id})=>{ if(!examOnlyWrong) return true; const a=ex.answers[id]; return !(a&&a.length)||!isCorrect(byId(id),a); }).map(({id,i})=>{
+        const q=byId(id); const a=ex.answers[id]; const ok = a&&a.length&&isCorrect(q,a);
+        return `<div class="card pad" style="padding:13px 14px">
+          <div class="between"><span class="badge ${ok?'ok':'bad'}">${ok?'答对':'答错'} · 第${i+1}题</span><span class="tiny muted">${esc(catName(q.cat))}</span></div>
+          <div style="margin-top:8px;font-weight:600;font-size:14.5px">${esc(q.stem)}</div>
+          <div class="small" style="margin-top:6px">正确答案：<b>${esc(answerText(q))}</b></div>
+          ${ok?'':`<div class="small muted">你的答案：${pickedText(q,a)}</div>`}
+          <div class="small muted" style="margin-top:4px">${esc(q.explain||'')}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="row" style="margin:16px 0 90px;gap:10px">
+      <button class="btn ghost" style="flex:1" onclick="go('home')">回首页</button>
+      <button class="btn" style="flex:1" onclick="startExam()">再考一次</button>
+    </div>
+  </div>`;
+}
+
+/* ============ 错题 ============ */
+function renderWrong(){
+  const list = wrongList();
+  $('#root').innerHTML = `
+  ${topbar('错题集', false, `<button class="iconbtn" onclick="exportWrong()">${icon('download',18)}</button>`)}
+  <div class="wrap" style="padding-top:14px">
+    <div class="card pad between">
+      <div><b>${list.length}</b> 道错题<span class="small muted"> · 已掌握 ${masteredCount()} 道</span>
+        <div class="small muted">连对 2 次自动移出错题集</div></div>
+      <button class="btn" ${list.length?'':'disabled'} onclick="startPractice('wrong')">重刷错题</button>
+    </div>
+    <div class="card pad" style="margin-top:12px">
+      ${list.length? list.map(q=>{
+        const r=S.seen[q.id]||{};
+        return `<div class="listitem">
+          <div style="flex:1" onclick="openQuestion('${q.id}')">
+            <div class="row" style="gap:6px"><span class="badge gray">${esc(catName(q.cat))}</span>${stars(q.diff)}
+              <span class="badge bad">错${r.bad||0}</span></div>
+            <div style="margin-top:5px;font-size:14.5px" class="clamp2">${esc(q.stem)}</div>
+            <div class="tiny muted" style="margin-top:4px">答案：${esc(answerText(q))}</div>
+          </div>
+          <button class="iconbtn" style="width:32px;height:32px" onclick="markMastered('${q.id}')">${icon('check',15)}</button>
+        </div>`;
+      }).join('') : `<div class="empty">还没有错题 🎉<br><span class="small">去刷题吧</span></div>`}
+    </div>
+    <div class="row" style="margin:14px 0 90px;gap:10px">
+      <button class="btn ghost" style="flex:1" onclick="exportWrong('doc')">导出 Word</button>
+      <button class="btn ghost" style="flex:1" onclick="exportWrong('pdf')">导出 PDF</button>
+    </div>
+  </div>`;
+}
+function markMastered(id){ const r=S.seen[id]||{n:0,ok:0,bad:0}; r.mastered=1; S.seen[id]=r; save(); renderWrong(); toast('已标记掌握'); }
+function openQuestion(id){
+  const q=byId(id); clearViewCache();
+  const prevSession = S.session;
+  S.session = {kind:'single', ids:[id], idx:0, answers:{}, startedAt:Date.now(), title:'题目详情'};
+  save(); go('practice');
+}
+/* ============ 统计 ============ */
+function renderStats(){
+  const st=statAll();
+  const cats={};
+  QB.forEach(q=>{ const c=q.cat; const r=S.seen[q.id]; if(!cats[c])cats[c]={n:0,done:0,ok:0,bad:0};
+    cats[c].n++; if(r&&r.n){cats[c].done++; cats[c].ok+=r.ok; cats[c].bad+=r.bad;} });
+  const hist=S.history.slice(0,10);
+  const days={};
+  Object.keys(S.seen).forEach(id=>{ const r=S.seen[id]; if(!r.lastAt) return;
+    const d=new Date(r.lastAt); const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    days[k]=(days[k]||0)+1; });
+  const dayKeys=Object.keys(days).sort().slice(-7);
+  const maxDay = Math.max(1,...dayKeys.map(k=>days[k]));
+  $('#root').innerHTML = `
+  ${topbar('统计', false)}
+  <div class="wrap" style="padding-top:14px">
+    <div class="grid2">
+      <div class="stat"><div class="n">${st.done}<span class="small muted">/${st.total}</span></div><div class="l">已练题数</div></div>
+      <div class="stat"><div class="n" style="color:var(--brand)">${st.rate}%</div><div class="l">总正确率</div></div>
+      <div class="stat"><div class="n" style="color:var(--ok)">${st.ok}</div><div class="l">答对次数</div></div>
+      <div class="stat"><div class="n" style="color:var(--bad)">${st.bad}</div><div class="l">答错次数</div></div>
+    </div>
+    <div class="card pad" style="margin-top:12px">
+      <b>最近 7 天练习量</b>
+      <div style="display:flex;align-items:flex-end;justify-content:center;gap:8px;height:96px;margin-top:12px">
+        ${dayKeys.length?dayKeys.map(k=>`<div style="flex:1;max-width:46px;min-width:24px;text-align:center">
+          <div style="height:${Math.round(days[k]/maxDay*70)}px;background:var(--brand);border-radius:6px 6px 2px 2px;opacity:.85"></div>
+          <div class="tiny muted" style="margin-top:4px">${k.slice(5)}</div></div>`).join(''):'<div class="empty small">还没有记录</div>'}
+      </div>
+    </div>
+    <div class="card pad" style="margin-top:12px">
+      <b>各知识点掌握度</b>
+      ${Object.keys(cats).map(c=>{const x=cats[c]; const p=x.done?pct(x.ok,x.ok+x.bad):0;
+        return `<div style="margin-top:12px">
+          <div class="between small"><span>${esc(catName(c))} <span class="muted">${x.done}/${x.n}</span></span><b>${p}%</b></div>
+          <div class="progress" style="margin-top:5px"><i style="width:${p}%"></i></div></div>`;}).join('')}
+    </div>
+    <div class="card pad" style="margin-top:12px">
+      <b>考试记录</b>
+      ${hist.length?hist.map(h=>`<div class="between small" style="padding:8px 0;border-bottom:1px solid var(--line)">
+        <span class="muted">${fmtDate(h.at)}</span><span>${h.right}/${h.total} · <b>${pct(h.right,h.total)}分</b></span></div>`).join(''):'<div class="empty small">还没有考试记录</div>'}
+    </div>
+    <div style="height:90px"></div>
+  </div>`;
+}
+/* ============ 设置 ============ */
+function renderMore(){
+  const s=S.settings, sy=S.sync;
+  $('#root').innerHTML = `
+  ${topbar('设置', false)}
+  <div class="wrap" style="padding-top:14px">
+    <div class="card pad">
+      <b>刷题偏好</b>
+      <div class="between" style="margin-top:12px"><div><div>选项乱序</div><div class="small muted">每次进入题目重新打乱 ABCD</div></div>
+        <label class="switch"><input type="checkbox" ${s.shuffle?'checked':''} onchange="setPref('shuffle',this.checked)"><i></i></label></div>
+      <div class="between" style="margin-top:12px"><div><div>答完立刻显示解析</div><div class="small muted">关闭后需点「看答案」</div></div>
+        <label class="switch"><input type="checkbox" ${s.instant?'checked':''} onchange="setPref('instant',this.checked)"><i></i></label></div>
+      <div class="between" style="margin-top:12px"><div><div>深色模式</div><div class="small muted">跟随系统 / 常亮 / 常暗</div></div>
+        <select style="width:120px" onchange="setPref('theme',this.value)">
+          ${['auto','light','dark'].map(t=>`<option value="${t}" ${s.theme===t?'selected':''}>${({auto:'跟随系统',light:'浅色',dark:'深色'})[t]}</option>`).join('')}
+        </select></div>
+      <hr>
+      <b>模拟考试</b>
+      <label class="field"><span>题量</span>
+        <select onchange="setPref('examCount',+this.value)">${[10,20,30,40,50,60].map(n=>`<option value="${n}" ${s.examCount==n?'selected':''}>${n} 题</option>`).join('')}</select></label>
+      <label class="field"><span>时长（分钟，0 = 按每题 1.2 分钟自动）</span>
+        <input type="number" min="0" max="180" value="${s.examMinutes}" onchange="setPref('examMinutes',+this.value)"></label>
+    </div>
+    <div class="card pad" style="margin-top:12px">
+      <div class="between"><b>云同步（GitHub Gist）</b><span class="badge ${sy.token&&sy.gist?'ok':'gray'}">${sy.token&&sy.gist?'已配置':'未配置'}</span></div>
+      <div class="small muted" style="margin-top:6px">填一次令牌，手机和电脑就共用同一份进度。令牌只存在本机浏览器里。</div>
+      <label class="field"><span>GitHub 令牌（scope: gist）</span>
+        <input type="text" id="ghToken" placeholder="ghp_... 或 github_pat_..." value="${esc(sy.token)}"></label>
+      <label class="field"><span>Gist ID（第一次留空，点“创建/上传”后自动生成）</span>
+        <input type="text" id="ghGist" placeholder="例如 1a2b3c4d5e..." value="${esc(sy.gist)}"></label>
+      <div class="between" style="margin-top:6px"><div class="small muted">自动同步</div>
+        <label class="switch"><input type="checkbox" ${sy.auto?'checked':''} onchange="setPref('auto',this.checked,'sync')"><i></i></label></div>
+      <div class="grid2" style="margin-top:12px">
+        <button class="btn ghost" onclick="syncUI('pull')">拉取云端</button>
+        <button class="btn" onclick="syncUI('push')">上传云端</button>
+      </div>
+      <div class="small muted" style="margin-top:8px">上次同步：${sy.last?fmtDate(sy.last):'从未'}</div>
+      <button class="btn block ghost" style="margin-top:10px" onclick="saveSyncConfig()">保存令牌设置</button>
+    </div>
+    <div class="card pad" style="margin-top:12px">
+      <b>数据备份</b>
+      <div class="grid2" style="margin-top:10px">
+        <button class="btn ghost" onclick="exportJSON()">导出进度</button>
+        <button class="btn ghost" onclick="importJSON()">导入进度</button>
+      </div>
+      <button class="btn block ghost" style="margin-top:10px;color:var(--bad)" onclick="resetAll()">清空全部记录</button>
+    </div>
+    <div class="card pad" style="margin-top:12px">
+      <b>关于</b>
+      <div class="small muted" style="margin-top:6px">题库 ${QB.length} 题 · ${esc(META.title)} · 更新 ${esc(META.updated||'-')}<br>
+      手机端：把 index.html 放手机里用浏览器打开，或部署到 GitHub Pages；电脑端同理。两端进度用 Gist 同步。<br>
+      快捷键：A/B/C/D 选项，Enter 下一题，← → 切题。</div>
+      <button class="btn block ghost" style="margin-top:10px" onclick="location.reload()">刷新</button>
+    </div>
+    <div style="height:90px"></div>
+  </div>`;
+}
+function setPref(k,v,grp){
+  if(grp==='sync') S.sync[k]=v; else S.settings[k]=v;
+  save(true); applyTheme();
+  if(k==='shuffle') clearViewCache();
+  if(grp!=='sync') renderMore();
+}
+function resetAll(){
+  showSheet(`<h3>清空全部记录？</h3><p class="small muted">做题进度、错题、考试记录都会删除，题库不受影响。建议先导出备份。</p>
+   <div class="row" style="margin-top:14px;gap:10px"><button class="btn ghost" style="flex:1" onclick="hideSheet()">取消</button>
+   <button class="btn" style="flex:1;background:var(--bad)" onclick="hideSheet();localStorage.removeItem('${LS_KEY}');location.reload()">确认清空</button></div>`);
+}
+/* ============ 导出 ============ */
+function wrongForExport(){
+  const list = wrongList();
+  const byCat={}; list.forEach(q=>{ (byCat[q.cat]=byCat[q.cat]||[]).push(q); });
+  return {list, byCat};
+}
+function exportWrong(kind){
+  const {list,byCat} = wrongForExport();
+  if(!list.length) return toast('错题集是空的');
+  if(kind==='pdf'){ printWrong(); return; }
+  const date = new Date().toLocaleDateString('zh-CN');
+  let body = `<h1 style="font-size:20pt">AI 通识错题本</h1><p>导出日期：${date} · 共 ${list.length} 题</p>`;
+  Object.keys(byCat).forEach(c=>{
+    body += `<h2 style="font-size:15pt;border-bottom:1px solid #999;margin-top:18pt">${esc(catName(c))}（${byCat[c].length} 题）</h2>`;
+    byCat[c].forEach((q,i)=>{
+      body += `<p style="margin:10pt 0 4pt"><b>${i+1}. ${esc(q.stem)}</b> <span style="color:#888">［难度 ${'★'.repeat(q.diff)}］</span></p>`;
+      body += `<p style="margin:0 0 2pt">${q.options.map((o,j)=>`${LETTERS[j]}. ${esc(o)}`).join('　')}</p>`;
+      body += `<p style="margin:0 0 2pt;color:#c00">正确答案：${q.answer.map(k=>LETTERS[k]+'. '+esc(q.options[k])).join('；')}</p>`;
+      const r=S.seen[q.id]||{};
+      if(r.bad) body += `<p style="margin:0 0 2pt;color:#888;font-size:10pt">累计错 ${r.bad} 次</p>`;
+      body += `<p style="margin:0 0 10pt">解析：${esc(q.explain||'')}</p>`;
+    });
+  });
+  const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+  <head><meta charset="utf-8"><title>AI通识错题本</title>
+  <style>body{font-family:"微软雅黑",sans-serif;font-size:11pt;line-height:1.6} h1{text-align:center}</style></head><body>${body}</body></html>`;
+  const blob = new Blob(['\ufeff'+html],{type:'application/msword'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='AI通识错题本_'+date.replace(/\//g,'-')+'.doc'; a.click();
+  toast('已导出 Word 文档');
+}
+function printWrong(){
+  const {list,byCat}=wrongForExport();
+  if(!list.length) return toast('错题集是空的');
+  const w = window.open('', '_blank');
+  if(!w) return toast('浏览器拦截了弹窗，请允许后重试');
+  let body='';
+  Object.keys(byCat).forEach(c=>{
+    body += `<h2>${esc(catName(c))}（${byCat[c].length} 题）</h2>`;
+    byCat[c].forEach((q,i)=>{
+      body += `<div class="q"><p class="s"><b>${i+1}. ${esc(q.stem)}</b> <span class="d">${'★'.repeat(q.diff)}</span></p>
+      <p class="o">${q.options.map((o,j)=>`${LETTERS[j]}. ${esc(o)}`).join('　')}</p>
+      <p class="a">正确答案：${q.answer.map(k=>LETTERS[k]+'. '+esc(q.options[k])).join('；')}</p>
+      <p class="e">解析：${esc(q.explain||'')}</p></div>`;
+    });
+  });
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>AI通识错题本</title>
+  <style>body{font-family:"Noto Sans CJK SC","PingFang SC","Microsoft YaHei",sans-serif;margin:28px;color:#111}
+  h1{font-size:22px;text-align:center}h2{font-size:16px;border-bottom:1px solid #bbb;padding-bottom:4px;margin-top:22px}
+  .q{margin-bottom:14px}.s{font-size:14px;margin:0 0 4px}.o{margin:0 0 3px;font-size:13px;color:#333}
+  .a{margin:0 0 3px;font-size:13px;color:#b00020}.e{margin:0;font-size:12.5px;color:#444}
+  .d{color:#e08a00;font-size:12px}@media(min-width:840px){ .modes{grid-template-columns:1fr 1fr} }
+@media print{@page{margin:14mm}}</style></head><body>
+  <h1>AI 通识错题本</h1><p style="text-align:center;font-size:12px;color:#666">共 ${list.length} 题 · ${new Date().toLocaleString('zh-CN')}</p>
+  ${body}<script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script></body></html>`);
+  w.document.close();
+}
+function exportJSON(){
+  // 不导出令牌：导出的文件可能被转发/上传，令牌只留在本机
+  const data={...S, sync:Object.assign({},S.sync,{token:''}), exportedAt:Date.now(), app:'ai-quiz'};
+  const blob=new Blob([JSON.stringify(data)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='ai-quiz-progress-'+new Date().toISOString().slice(0,10)+'.json'; a.click();
+  toast('进度已导出');
+}
+function importJSON(){
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='.json,application/json';
+  inp.onchange=()=>{ const f=inp.files[0]; if(!f) return; const fr=new FileReader();
+    fr.onload=()=>{ try{ const d=JSON.parse(fr.result);
+      S = Object.assign(defaultState(), d, {
+        settings:Object.assign(defaultState().settings,d.settings||{}),
+        sync:Object.assign({}, S.sync, d.sync||{}, {token:S.sync.token})
+      });
+      save(true); render(); toast('进度已导入'); }catch(e){ toast('文件格式不对'); } };
+    fr.readAsText(f); };
+  inp.click();
+}
+/* ============ 云同步（GitHub Gist） ============ */
+function saveSyncConfig(){
+  S.sync.token = ($('#ghToken').value||'').trim();
+  S.sync.gist = ($('#ghGist').value||'').trim();
+  save(true); renderMore(); toast('已保存，可点上传/拉取');
+}
+const GIST_FILE='ai-quiz-progress.json';
+async function ghApi(path, opt){
+  const r = await fetch('https://api.github.com'+path, Object.assign({
+    headers:{'Authorization':'Bearer '+S.sync.token,'Accept':'application/vnd.github+json','Content-Type':'application/json'}
+  }, opt));
+  if(!r.ok){ const t=await r.text(); throw new Error(r.status+' '+t.slice(0,160)); }
+  return r.json();
+}
+function mergeState(remote){
+  // 合并：做题次数取两边的最大值；最近一次结果、星级、掌握状态以 lastAt 较新的一侧为准
+  const out = JSON.parse(JSON.stringify(S));
+  if(!remote||!remote.seen) return out;
+  Object.keys(remote.seen).forEach(id=>{
+    const a=S.seen[id], b=remote.seen[id];
+    if(!a){ out.seen[id]=b; return; }
+    const pickNew = (a.lastAt||0) >= (b.lastAt||0) ? a : b;
+    out.seen[id]={
+      n: Math.max(a.n||0,b.n||0), ok: Math.max(a.ok||0,b.ok||0), bad: Math.max(a.bad||0,b.bad||0),
+      lastOk: pickNew.lastOk, lastAt: Math.max(a.lastAt||0,b.lastAt||0),
+      star: Math.max(a.star||0,b.star||0), mastered: pickNew.mastered?1:0, streak: (pickNew.streak||0)
+    };
+  });
+  const hist={};
+  (S.history||[]).concat(remote.history||[]).forEach(h=>{ if(h&&h.at) hist[h.at+'|'+h.total+'|'+h.right]=h; });
+  out.history = Object.keys(hist).map(k=>hist[k]).sort((x,y)=>y.at-x.at).slice(0,50);
+  return out;
+}
+let syncTimer=null;
+function scheduleSync(){ clearTimeout(syncTimer); syncTimer=setTimeout(()=>{ if(route.name!=='more') doSync('auto').catch(()=>{}); }, 4000); }
+function syncUI(mode){
+  // 直接从设置页输入框取值，免得用户忘了先点“保存令牌设置”
+  if($('#ghToken')) S.sync.token=($('#ghToken').value||'').trim();
+  if($('#ghGist')) S.sync.gist=($('#ghGist').value||'').trim();
+  syncNow(mode);
+}
+async function syncNow(mode){
+  if(syncing) return toast('正在同步，请稍候');
+  try{ await doSync(mode); }catch(e){ toast('同步失败：'+e.message); }
+}
+async function doSync(mode){
+  if(!S.sync.token) return toast('先填 GitHub 令牌');
+  if(!S.sync.gist && mode!=='push') return toast('还没有 Gist，点“上传云端”先创建');
+  if(syncing) return;
+  syncing=true;
+  let created=false, merged=false;
+  try{
+    // 关键顺序：先读云端并合并，再上传合并后的结果。
+    // 反过来会先用本机旧数据覆盖另一台设备的新进度。
+    if(S.sync.gist){
+      const g = await ghApi('/gists/'+S.sync.gist);
+      const f = g.files && g.files[GIST_FILE];
+      if(f){
+        let remote=null; try{ remote=JSON.parse(f.content); }catch(e){}
+        if(remote && remote.seen){ S = mergeState(remote); merged=true; }
+      }
+    }
+    if(mode==='push' || mode==='auto'){
+      const payload = {seen:S.seen, history:S.history, wrongNotes:S.wrongNotes, settings:S.settings, updatedAt:Date.now()};
+      if(!S.sync.gist){
+        const g = await ghApi('/gists',{method:'POST',body:JSON.stringify({description:'AI 刷题进度',public:false,
+          files:{[GIST_FILE]:{content:JSON.stringify(payload)}}})});
+        S.sync.gist=g.id; created=true;
+      }else{
+        await ghApi('/gists/'+S.sync.gist,{method:'PATCH',body:JSON.stringify({files:{[GIST_FILE]:{content:JSON.stringify(payload)}}})});
+      }
+    }
+    S.sync.last=Date.now(); save(true);
+  } finally { syncing=false; }
+  if(merged && ['more','home','stats','wrong'].includes(route.name)) render();
+  if(mode==='push') toast(created?'已创建私有 Gist 并上传':'已上传到云端');
+  else if(mode==='pull') toast(merged?'已拉取并合并云端进度':'云端还没有数据');
+}
+/* ============ 键盘 ============ */
+document.addEventListener('keydown', e=>{
+  if(/input|textarea|select/i.test(document.activeElement.tagName)) return;
+  if(route.name==='practice'){
+    const k = e.key.toUpperCase();
+    if(['A','B','C','D','E','F'].includes(k)){ e.preventDefault(); pick(k); return; }
+    if(e.key==='Enter'||e.key===' '){ e.preventDefault(); const sess=S.session; const q=byId(sess.ids[sess.idx]);
+      if(sess.answers[q.id]) move(1); else reveal(); return; }
+    if(e.key==='ArrowLeft'){ move(-1); }
+    if(e.key==='ArrowRight'){ move(1); }
+  }
+  if(route.name==='exam'){
+    const k=e.key.toUpperCase();
+    if(['A','B','C','D'].includes(k)){ e.preventDefault(); examPick(k); }
+    if(e.key==='ArrowRight'){ examMove(1); }
+    if(e.key==='ArrowLeft'){ examMove(-1); }
+  }
+});
+/* ============ 启动 ============ */
+document.querySelectorAll('#tabbar button').forEach(b=>b.onclick=()=>go(b.dataset.tab));
+applyTheme();
+if(S.session && S.session.ids && route.name==='home'){ /* 只在首页展示继续卡片 */ }
+render();
+// 打开页面先拉取合并一次，保证换设备后看到的是最新进度
+if(S.sync.token && S.sync.gist && S.sync.auto){
+  setTimeout(()=>{ doSync('auto').catch(()=>{}); }, 800);
+}
+</script>
+</body>
+</html>
